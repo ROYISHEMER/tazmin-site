@@ -35,27 +35,23 @@ dictionaries and is labelled "demo data" on screen.
 
 ## How the scroll journey works
 
-The journey section is a tall track with a `position: sticky` stage and one GSAP timeline scrubbed
-by scroll. It follows a single WhatsApp message from start to finish:
+The journey section is a tall track with a `position: sticky` stage. One GSAP timeline is scrubbed
+by scroll, one unit of time per step; scenes (phone, customer lookup, quote card, outcome) change
+in place. On desktop a message token travels down a dashed zigzag route on the far side of the
+stage, turns into each scene along a dashed link, and the scene reacts when it arrives.
 
-1. the message arrives in the rep's phone and is forwarded;
-2. its five lines fly out of the phone and land in one card, which stays on screen from then on;
-3. the company's data sources (customers, history, price list, catalog) dock above the card and
-   light up whenever they are used;
-4. a reading beam parses the lines, quantities leave the text for their own column, each line locks
-   onto a SKU, the unclear one opens three options and a "rep" pointer picks one;
-5. prices fly from the price list into the rows, the rep pointer approves;
-6. the card itself shrinks into the PDF in the customer's phone, and the reply becomes an ERP order.
-
-Steps get different amounts of scroll (`src/lib/journey.ts`): parsing, matching and the final
-hand-off are longer than the simple steps. Positions of things in flight are read from layout
-offsets inside function-based GSAP values, so they are re-measured on resize.
-
-On desktop a token also rides a dashed zigzag route on the far side of the stage and turns into
-the scene at every step.
+How much scrolling the whole journey takes is one number: the `58vh` per step in
+`.journey.anim .journey-track` (`src/styles/home.css`). Lower is shorter.
 
 With `prefers-reduced-motion`, with "Stop animations" in the accessibility menu, or without
 JavaScript, the journey renders as a plain numbered list of the nine steps.
+
+## Integrations section
+
+`src/components/Integrations.tsx` shows the channel (WhatsApp), Tazmin, and the systems an order
+goes into. The list is `systems.tools` in the dictionaries. WhatsApp, SAP and Google Sheets use
+the marks from the CC0 `simple-icons` package; for the others, drop an official SVG into
+`public/logos/<key>.svg` (see `public/logos/README.md`). Until then the tile shows a monogram.
 
 ## Where "Talk to us" leads go
 
@@ -91,14 +87,14 @@ accounts; the site does not need them.
 - [ ] Have a lawyer review `src/i18n/legal.ts` (the pages carry a "draft" banner; remove it in `LegalPage.tsx` once approved).
 - [ ] Name the accessibility coordinator; consider an audit by a licensed accessibility expert.
 - [ ] Configure a lead destination (database and/or email) and send a test lead.
-- [ ] Confirm the integrations list in `systems` (Priority, Google Sheets now; others planned) is still accurate.
+- [ ] Confirm every system listed in the integrations section really is supported before publishing the claim.
+- [ ] Add official logo files for Priority, Hashavshevet and Rivhit (`public/logos/`), with permission.
 - [ ] Add a social preview image (`src/app/[lang]/opengraph-image.png`, 1200×630).
 
 ## Snapshots
 
-- Tag `v1-before-travelling-message`: the first look (pinned journey with the station rail on the
-  side, scenes replacing each other).
-- Tag `v2-zigzag-route`: the zigzag route added and the desktop rail removed, before the journey
-  became one continuous transformation.
+Earlier looks of the journey are kept as git tags (`git checkout <tag>` to view, `git checkout main` to come back):
 
-`git checkout <tag>` to view either one; `git checkout main` to come back.
+- `v1-before-travelling-message`: the first look, with the station rail on the side.
+- `v2-zigzag-route`: zigzag route added, desktop rail removed. **The current journey is this one**, with a shorter scroll.
+- `v3-continuous-journey`: an experiment where the message lines fly into one card that evolves to the end. Not used.

@@ -4,6 +4,7 @@ import '@/styles/home.css';
 import { Motion } from '@/components/Motion';
 import { Journey } from '@/components/Journey';
 import { ContactForm } from '@/components/ContactForm';
+import { Integrations } from '@/components/Integrations';
 import { LogoMark, Check } from '@/components/LogoMark';
 import { dict, href } from '@/i18n';
 import { extra } from '@/i18n/extra';
@@ -150,25 +151,8 @@ export default async function Home({ params }: LangParams) {
         </div>
       </section>
 
-      {/* ───────── Systems ───────── */}
-      <section className="systems">
-        <div className="wrap systems-in">
-          <div>
-            <p className="eyebrow" data-reveal>{t.systems.eyebrow}</p>
-            <h2 className="h-section" data-reveal>{t.systems.title}</h2>
-            <p className="lead" data-reveal>{t.systems.lead}</p>
-          </div>
-          <div className="sys-card" data-reveal>
-            <div className="sys-hub" aria-hidden="true"><LogoMark /></div>
-            <dl>
-              <div><dt>{t.systems.nowLabel}</dt><dd>{t.systems.now.map((s) => <span className="chip on" key={s}>{s}</span>)}</dd></div>
-              <div><dt>{t.systems.nextLabel}</dt><dd>{t.systems.next.map((s) => <span className="chip" key={s}>{s}</span>)}</dd></div>
-              <div><dt>{t.systems.verticalsLabel}</dt><dd>{t.systems.verticals.map((s) => <span className="chip plain" key={s}>{s}</span>)}</dd></div>
-            </dl>
-            <p className="sys-note">{t.systems.note}</p>
-          </div>
-        </div>
-      </section>
+      {/* ───────── Integrations ───────── */}
+      <Integrations lang={lang} />
 
       {/* ───────── Benefits ───────── */}
       <section className="benefits" aria-label={t.benefits.label}>
