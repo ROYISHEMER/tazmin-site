@@ -24,7 +24,7 @@ const site = ['.next-export', 'out'].map((d) => join(root, d)).find((d) => exist
 if (!site) throw new Error('Static export not found (expected he/index.html in .next-export or out).');
 
 const asset = (url) => join(site, decodeURIComponent(url.split('?')[0]));
-const mime = { woff2: 'font/woff2', woff: 'font/woff', svg: 'image/svg+xml', png: 'image/png' };
+const mime = { woff2: 'font/woff2', woff: 'font/woff', svg: 'image/svg+xml', png: 'image/png', webp: 'image/webp' };
 const dataUri = (url) => {
   const ext = url.split('?')[0].split('.').pop();
   return `data:${mime[ext] ?? 'application/octet-stream'};base64,${readFileSync(asset(url)).toString('base64')}`;
@@ -66,6 +66,8 @@ function build(lang) {
   // Nothing left to fetch from /_next: drop preloads, inline the icon
   html = html.replace(/<link[^>]+rel="(?:preload|modulepreload|prefetch)"[^>]*>/g, '');
   html = html.replace(/href="\/favicon\.svg"/g, () => `href="${dataUri('/favicon.svg')}"`);
+  // Images served from /public (the integration logos) travel inside the file too
+  html = html.replace(/src="(\/logos\/[^"]+)"/g, (_, u) => `src="${dataUri(u)}"`);
 
   mkdirSync(outDir, { recursive: true });
   const file = join(outDir, `tazmin-landing-${lang}.html`);
