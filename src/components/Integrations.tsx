@@ -9,8 +9,11 @@ import { dict, href, type Lang } from '@/i18n';
  * "Works with the software you already use": the channel orders come from, Tazmin in the
  * middle, and the systems the approved order goes into.
  *
- * Logos: marks from the CC0 simple-icons set where one exists; otherwise an official SVG
- * dropped into public/logos/<key>.svg; otherwise a neutral monogram (see public/logos/README.md).
+ * Logos: marks from the CC0 simple-icons set where one exists; otherwise the official file
+ * in public/logos/<key>.(svg|png|webp); otherwise a neutral monogram (see public/logos/README.md).
+ *
+ * Motion: the entrance is driven by <Motion> through the data-flow-* hooks; the flowing
+ * dashes, the travelling dot and the hub pulse are CSS (home.css) and stop with reduced motion.
  */
 const MARKS: Record<string, { path: string; hex: string }> = {
   whatsapp: siWhatsapp,
@@ -27,17 +30,21 @@ function BrandLogo({ id, name }: { id: string; name: string }) {
       </svg>
     );
   }
-  if (existsSync(join(process.cwd(), 'public', 'logos', `${id}.svg`))) {
+  const ext = ['svg', 'png', 'webp'].find((e) => existsSync(join(process.cwd(), 'public', 'logos', `${id}.${e}`)));
+  if (ext) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={`/logos/${id}.svg`} alt="" />;
+    return <img src={`/logos/${id}.${ext}`} alt="" loading="lazy" />;
   }
   return <span className="monogram" aria-hidden="true">{name.trim().slice(0, 1)}</span>;
 }
 
-function Tile({ id, name, kind }: { id: string; name: string; kind: string }) {
+/** Logos drawn in white for dark backgrounds: shown unchanged, on a dark plate. */
+const ON_DARK = new Set(['rivhit']);
+
+function Tile({ id, name, kind, hook }: { id: string; name: string; kind: string; hook: 'in' | 'tile' }) {
   return (
-    <li className="tile" data-reveal data-spot>
-      <span className="tile-logo"><BrandLogo id={id} name={name} /></span>
+    <li className="tile" data-spot {...(hook === 'in' ? { 'data-flow-in': '' } : { 'data-flow-tile': '' })}>
+      <span className={`tile-logo${ON_DARK.has(id) ? ' on-dark' : ''}`}><BrandLogo id={id} name={name} /></span>
       <b>{name}</b>
       <small>{kind}</small>
     </li>
@@ -55,25 +62,25 @@ export function Integrations({ lang }: { lang: Lang }) {
           <p className="lead" data-reveal>{s.lead}</p>
         </div>
 
-        <div className="flow">
+        <div className="flow" data-flow>
           <div className="flow-col">
             <p className="flow-label">{s.channelLabel}</p>
             <ul className="tiles single" role="list">
-              {s.channel.map((c) => <Tile key={c.key} id={c.key} name={c.name} kind={c.kind} />)}
+              {s.channel.map((c) => <Tile key={c.key} id={c.key} name={c.name} kind={c.kind} hook="in" />)}
             </ul>
           </div>
 
           <div className="flow-hub" aria-hidden="true">
-            <span className="flow-line" />
-            <span className="hub"><LogoMark /></span>
-            <span className="flow-line" />
+            <span className="flow-line" data-flow-line><i /></span>
+            <span className="hub" data-flow-hub><LogoMark /></span>
+            <span className="flow-line" data-flow-line><i /></span>
           </div>
 
           <div className="flow-col">
             <p className="flow-label">{s.systemsLabel}</p>
             <ul className="tiles" role="list">
-              {s.tools.map((c) => <Tile key={c.key} id={c.key} name={c.name} kind={c.kind} />)}
-              <li className="tile other" data-reveal>
+              {s.tools.map((c) => <Tile key={c.key} id={c.key} name={c.name} kind={c.kind} hook="tile" />)}
+              <li className="tile other" data-flow-tile>
                 <b>{s.other}</b>
                 <Link href={href('/contact', lang)}>{s.otherCta} <span className="arrow-i" aria-hidden="true" /></Link>
               </li>

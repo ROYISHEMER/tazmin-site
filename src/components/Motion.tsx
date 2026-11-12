@@ -111,6 +111,21 @@ export function Motion({ children }: { children: ReactNode }) {
         });
       }
 
+      // ── Integrations: WhatsApp → line → Tazmin → line → the systems, in that order
+      const flow = one('[data-flow]');
+      if (flow) {
+        const rtl = getComputedStyle(flow).direction === 'rtl';
+        const lines = all('[data-flow-line]', flow);
+        const origin = rtl ? '100% 0%' : '0% 0%';
+        gsap
+          .timeline({ defaults: { ease: 'power3.out' }, scrollTrigger: { trigger: flow, start: 'top 78%', once: true } })
+          .from(all('[data-flow-in]', flow), { autoAlpha: 0, scale: 0.85, y: 24, duration: 0.6 })
+          .from(lines[0], { scale: 0, transformOrigin: origin, duration: 0.4, ease: 'power2.inOut' }, '-=0.15')
+          .from(one('[data-flow-hub]', flow), { autoAlpha: 0, scale: 0.4, duration: 0.5, ease: 'back.out(2)' }, '-=0.1')
+          .from(lines[1], { scale: 0, transformOrigin: origin, duration: 0.4, ease: 'power2.inOut' }, '-=0.15')
+          .from(all('[data-flow-tile]', flow), { autoAlpha: 0, y: 28, scale: 0.9, duration: 0.55, stagger: 0.07 }, '-=0.15');
+      }
+
       // ── The journey
       const journey = one('[data-journey]');
       if (journey) {

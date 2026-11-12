@@ -50,8 +50,10 @@ JavaScript, the journey renders as a plain numbered list of the nine steps.
 
 `src/components/Integrations.tsx` shows the channel (WhatsApp), Tazmin, and the systems an order
 goes into. The list is `systems.tools` in the dictionaries. WhatsApp, SAP and Google Sheets use
-the marks from the CC0 `simple-icons` package; for the others, drop an official SVG into
-`public/logos/<key>.svg` (see `public/logos/README.md`). Until then the tile shows a monogram.
+the marks from the CC0 `simple-icons` package; Priority, Hashavshevet and Rivhit use the logo
+files in `public/logos/`, downloaded from each company's own website (sources are listed in
+`public/logos/README.md`). On scroll the section plays in order (WhatsApp, line, Tazmin, line,
+systems); the drifting dashes, travelling dot and hub pulse are CSS and stop with reduced motion.
 
 ## Where "Talk to us" leads go
 
@@ -88,7 +90,7 @@ accounts; the site does not need them.
 - [ ] Name the accessibility coordinator; consider an audit by a licensed accessibility expert.
 - [ ] Configure a lead destination (database and/or email) and send a test lead.
 - [ ] Confirm every system listed in the integrations section really is supported before publishing the claim.
-- [ ] Add official logo files for Priority, Hashavshevet and Rivhit (`public/logos/`), with permission.
+- [ ] Third-party logos are shown without the owners' permission so far. Check each company's brand guidelines or ask before publishing; get a higher-resolution Hashavshevet logo.
 - [ ] Add a social preview image (`src/app/[lang]/opengraph-image.png`, 1200×630).
 
 ## Snapshots
