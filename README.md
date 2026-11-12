@@ -35,10 +35,24 @@ dictionaries and is labelled "demo data" on screen.
 
 ## How the scroll journey works
 
-The journey section is a tall track with a `position: sticky` stage. One GSAP timeline is scrubbed
-by scroll, one unit of time per step. On desktop a message token travels down a dashed zigzag
-route on the far side of the stage, turns into each station along a dashed link, and the station
-reacts when it arrives.
+The journey section is a tall track with a `position: sticky` stage and one GSAP timeline scrubbed
+by scroll. It follows a single WhatsApp message from start to finish:
+
+1. the message arrives in the rep's phone and is forwarded;
+2. its five lines fly out of the phone and land in one card, which stays on screen from then on;
+3. the company's data sources (customers, history, price list, catalog) dock above the card and
+   light up whenever they are used;
+4. a reading beam parses the lines, quantities leave the text for their own column, each line locks
+   onto a SKU, the unclear one opens three options and a "rep" pointer picks one;
+5. prices fly from the price list into the rows, the rep pointer approves;
+6. the card itself shrinks into the PDF in the customer's phone, and the reply becomes an ERP order.
+
+Steps get different amounts of scroll (`src/lib/journey.ts`): parsing, matching and the final
+hand-off are longer than the simple steps. Positions of things in flight are read from layout
+offsets inside function-based GSAP values, so they are re-measured on resize.
+
+On desktop a token also rides a dashed zigzag route on the far side of the stage and turns into
+the scene at every step.
 
 With `prefers-reduced-motion`, with "Stop animations" in the accessibility menu, or without
 JavaScript, the journey renders as a plain numbered list of the nine steps.
@@ -69,7 +83,10 @@ accounts; the site does not need them.
 
 ## Before going live
 
-- [ ] Fill every `null` in `src/config/site.ts`. Until then the site prints a visible `[להשלים]` / `[to complete]` marker.
+- [x] Contact details are filled in `src/config/site.ts` (the three founders, address, email, phones).
+- [ ] Once a company is registered: put its legal name in `SITE.legalName` and add its number to the legal texts.
+- [ ] Confirm the English spellings of the founders' names and who the accessibility coordinator is (defaults to the primary contact).
+- [ ] Optional: set `SITE.whatsapp` to show a WhatsApp link on the contact page.
 - [ ] Set the real domain in `SITE.url`.
 - [ ] Have a lawyer review `src/i18n/legal.ts` (the pages carry a "draft" banner; remove it in `LegalPage.tsx` once approved).
 - [ ] Name the accessibility coordinator; consider an audit by a licensed accessibility expert.
@@ -79,5 +96,9 @@ accounts; the site does not need them.
 
 ## Snapshots
 
-- Tag `v1-before-travelling-message`: the site before the zigzag travelling-message animation
-  (pinned journey with the station rail on the side). `git checkout v1-before-travelling-message` to view it.
+- Tag `v1-before-travelling-message`: the first look (pinned journey with the station rail on the
+  side, scenes replacing each other).
+- Tag `v2-zigzag-route`: the zigzag route added and the desktop rail removed, before the journey
+  became one continuous transformation.
+
+`git checkout <tag>` to view either one; `git checkout main` to come back.

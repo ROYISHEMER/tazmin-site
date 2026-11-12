@@ -1,4 +1,4 @@
-import { SITE, val, type Lang } from '../config/site';
+import { SITE, val, formatPhone, primaryPhone, type Lang } from '../config/site';
 import { he, type Dict } from './he';
 import { en } from './en';
 
@@ -31,14 +31,13 @@ export const homeAnchor = (id: string, lang: Lang): string => (STANDALONE ? `#${
 export const fill = (text: string, lang: Lang): string => {
   const map: Record<string, string | null> = {
     legalName: SITE.legalName[lang],
-    companyId: SITE.companyId,
     address: SITE.address[lang],
     email: SITE.email,
-    phone: SITE.phone,
+    phone: primaryPhone(),
     privacyEmail: SITE.privacyEmail ?? SITE.email,
     a11yName: SITE.a11yCoordinator.name[lang],
     a11yEmail: SITE.a11yCoordinator.email ?? SITE.email,
-    a11yPhone: SITE.a11yCoordinator.phone ?? SITE.phone,
+    a11yPhone: SITE.a11yCoordinator.phone ? formatPhone(SITE.a11yCoordinator.phone) : primaryPhone(),
   };
   return text.replace(/\{(\w+)\}/g, (_, k: string) => val(map[k], lang));
 };

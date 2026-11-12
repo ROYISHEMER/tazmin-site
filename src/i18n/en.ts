@@ -113,7 +113,7 @@ export const en: Dict = {
     ui: {
       contact: 'Avi · A.S. Solar',
       online: 'typing…',
-      bubble: ['bro bring 20 panels 550', '100m cable 6 black', 'inverter 50 kilo like last time'],
+      bubble: ['bro bring 20 panels 550', '100m cable 6 black'],
       note: ['40 pairs MC4', '80 end clamps for 35'],
       voice: '0:12',
       forwardTo: 'Forward to',
@@ -123,6 +123,11 @@ export const en: Dict = {
       systems: ['Customer list', 'Order history', 'Customer price list'],
       systemTags: ['CRM', 'ERP', 'ERP'],
       identified: 'Customer identified',
+      newMessage: 'New message',
+      identifying: 'Identifying the customer…',
+      catalog: 'Catalog',
+      rep: 'Rep',
+      orderIn: 'Order is in the system',
       customer: 'A.S. Solar Ltd.',
       initials: 'AS',
       customerRows: [
@@ -135,10 +140,10 @@ export const en: Dict = {
       sources: { text: 'Text', hand: 'Handwriting', voice: 'Voice' },
       cols: { item: 'Item', qty: 'Qty', price: 'Price' },
       lines: [
-        { raw: '20 panels 550', src: 'text', qty: '20', name: 'Solar panel 550W mono', sku: 'PV-550-M', price: '8,400' },
+        { raw: 'bro bring 20 panels 550', src: 'text', qty: '20', name: 'Solar panel 550W mono', sku: 'PV-550-M', price: '8,400' },
         { raw: '100m cable 6 black', src: 'text', qty: '1 roll', name: 'Solar cable 6mm² black, 100m', sku: 'CB-6-BK-100', price: '390' },
-        { raw: '40 pairs MC4', src: 'hand', qty: '40', name: 'MC4 connector, pair', sku: 'MC4-PR', price: '360' },
         { raw: 'inverter 50 kilo like last time', src: 'voice', qty: '1', name: 'Inverter 50kW', sku: 'INV-50K', price: '14,500', alias: 'From the last order' },
+        { raw: '40 pairs MC4', src: 'hand', qty: '40', name: 'MC4 connector, pair', sku: 'MC4-PR', price: '360' },
         { raw: '80 end clamps for 35', src: 'hand', qty: '80', name: 'End clamp 35mm, aluminium', sku: 'EC-35-AL', price: '480', ambiguous: true },
       ] as Line[],
       threeOptions: '3 options',

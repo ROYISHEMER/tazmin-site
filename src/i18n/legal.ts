@@ -125,7 +125,7 @@ export const LEGAL: Docs = {
       title: 'מדיניות פרטיות',
       description: 'איזה מידע נאסף באתר תזמין, למה, ומה הזכויות שלכם.',
       intro: [
-        'מדיניות זו מסבירה איזה מידע אנחנו אוספים באתר הזה, למה, ומה הזכויות שלכם. האתר מופעל על ידי {legalName}, {companyId} (״אנחנו״).',
+        'מדיניות זו מסבירה איזה מידע אנחנו אוספים באתר הזה, למה, ומה הזכויות שלכם. האתר מופעל על ידי {legalName} (״אנחנו״).',
         'המדיניות מתייחסת לאתר השיווקי בלבד. עיבוד מידע במסגרת שירות תזמין עצמו (למשל הזמנות ונתוני לקוחות של חברה שמשתמשת בשירות) מוסדר בהסכם נפרד מול אותה חברה.',
       ],
       sections: [
@@ -215,7 +215,7 @@ export const LEGAL: Docs = {
         {
           id: 'contact',
           h: 'יצירת קשר',
-          list: ['{legalName}, {companyId}', 'כתובת: {address}', 'דוא״ל: {privacyEmail}', 'טלפון: {phone}'],
+          list: ['{legalName}', 'כתובת: {address}', 'דוא״ל: {privacyEmail}', 'טלפון: {phone}'],
         },
       ],
     },
@@ -223,7 +223,7 @@ export const LEGAL: Docs = {
       title: 'Privacy policy',
       description: 'What information the Tazmin website collects, why, and what your rights are.',
       intro: [
-        'This policy explains what information we collect on this website, why, and what your rights are. The site is operated by {legalName}, {companyId} (“we”).',
+        'This policy explains what information we collect on this website, why, and what your rights are. The site is operated by {legalName} (“we”).',
         'It covers the marketing website only. Data processed within the Tazmin service itself (for example, orders and customer data of a company using the service) is governed by a separate agreement with that company.',
       ],
       sections: [
@@ -313,7 +313,7 @@ export const LEGAL: Docs = {
         {
           id: 'contact',
           h: 'Contact',
-          list: ['{legalName}, {companyId}', 'Address: {address}', 'Email: {privacyEmail}', 'Phone: {phone}'],
+          list: ['{legalName}', 'Address: {address}', 'Email: {privacyEmail}', 'Phone: {phone}'],
         },
       ],
     },
@@ -324,7 +324,7 @@ export const LEGAL: Docs = {
       title: 'תנאי שימוש',
       description: 'התנאים החלים על השימוש באתר תזמין.',
       intro: [
-        'ברוכים הבאים לאתר תזמין, המופעל על ידי {legalName}, {companyId} (״אנחנו״). השימוש באתר מהווה הסכמה לתנאים האלה. אם אינכם מסכימים להם, אנא אל תשתמשו באתר.',
+        'ברוכים הבאים לאתר תזמין, המופעל על ידי {legalName} (״אנחנו״). השימוש באתר מהווה הסכמה לתנאים האלה. אם אינכם מסכימים להם, אנא אל תשתמשו באתר.',
         'התנאים מנוסחים בלשון רבים מטעמי נוחות, והם פונים לכל אדם.',
       ],
       sections: [
@@ -401,7 +401,7 @@ export const LEGAL: Docs = {
         {
           id: 'contact',
           h: 'יצירת קשר',
-          list: ['{legalName}, {companyId}', 'כתובת: {address}', 'דוא״ל: {email}', 'טלפון: {phone}'],
+          list: ['{legalName}', 'כתובת: {address}', 'דוא״ל: {email}', 'טלפון: {phone}'],
         },
       ],
     },
@@ -409,7 +409,7 @@ export const LEGAL: Docs = {
       title: 'Terms of use',
       description: 'The terms that apply to using the Tazmin website.',
       intro: [
-        'Welcome to the Tazmin website, operated by {legalName}, {companyId} (“we”). By using the site you agree to these terms. If you do not agree, please do not use the site.',
+        'Welcome to the Tazmin website, operated by {legalName} (“we”). By using the site you agree to these terms. If you do not agree, please do not use the site.',
         'In case of any discrepancy between the Hebrew and English versions of these terms, the Hebrew version prevails.',
       ],
       sections: [
@@ -486,7 +486,7 @@ export const LEGAL: Docs = {
         {
           id: 'contact',
           h: 'Contact',
-          list: ['{legalName}, {companyId}', 'Address: {address}', 'Email: {email}', 'Phone: {phone}'],
+          list: ['{legalName}', 'Address: {address}', 'Email: {email}', 'Phone: {phone}'],
         },
       ],
     },

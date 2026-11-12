@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { dict, href } from '@/i18n';
 import { extra } from '@/i18n/extra';
-import { SITE, val } from '@/config/site';
+import { SITE, val, formatPhone, telHref } from '@/config/site';
 import { langOf, pageMeta, type LangParams } from '@/lib/meta';
 
 export async function generateMetadata({ params }: LangParams) {
@@ -13,13 +13,6 @@ export async function generateMetadata({ params }: LangParams) {
 export default async function About({ params }: LangParams) {
   const lang = await langOf(params);
   const a = dict(lang).about;
-  const rows: [string, string][] = [
-    [a.companyRows.name, val(SITE.legalName[lang], lang)],
-    [a.companyRows.id, val(SITE.companyId, lang)],
-    [a.companyRows.address, val(SITE.address[lang], lang)],
-    [a.companyRows.email, val(SITE.email, lang)],
-    [a.companyRows.phone, val(SITE.phone, lang)],
-  ];
 
   return (
     <div className="page wrap">
@@ -38,7 +31,20 @@ export default async function About({ params }: LangParams) {
         <section className="card" aria-labelledby="company-title">
           <h2 id="company-title">{a.companyTitle}</h2>
           <dl className="kv">
-            {rows.map(([k, v]) => (<div className="kv-row" key={k}><dt>{k}</dt><dd>{v}</dd></div>))}
+            <dt>{a.companyRows.name}</dt>
+            <dd>{val(SITE.legalName[lang], lang)}</dd>
+            <dt>{a.companyRows.address}</dt>
+            <dd>{val(SITE.address[lang], lang)}</dd>
+            <dt>{a.companyRows.email}</dt>
+            <dd>{SITE.email ? <a className="ltr" href={`mailto:${SITE.email}`}>{SITE.email}</a> : val(null, lang)}</dd>
+            <dt>{a.companyRows.phone}</dt>
+            <dd>
+              <ul className="people">
+                {SITE.people.map((p) => (
+                  <li key={p.phone}>{p.name[lang]}: <a className="ltr" href={telHref(p.phone)}>{formatPhone(p.phone)}</a></li>
+                ))}
+              </ul>
+            </dd>
           </dl>
         </section>
         <p><Link className="btn lg" href={href('/contact', lang)}>{extra(lang).nav.talk}</Link></p>

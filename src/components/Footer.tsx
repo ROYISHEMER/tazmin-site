@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { LogoMark } from './LogoMark';
 import { dict, href, homeAnchor, type Lang } from '@/i18n';
 import { extra } from '@/i18n/extra';
-import { SITE, val, isSet } from '@/config/site';
+import { SITE, isSet, formatPhone, telHref } from '@/config/site';
 
 export function Footer({ lang }: { lang: Lang }) {
   const t = dict(lang);
@@ -31,6 +31,7 @@ export function Footer({ lang }: { lang: Lang }) {
               <li><Link href={href('/about', lang)}>{t.nav.about}</Link></li>
               <li><Link href={href('/contact', lang)}>{x.nav.talk}</Link></li>
               {isSet(SITE.email) && <li><a href={`mailto:${SITE.email}`} className="ltr">{SITE.email}</a></li>}
+              {SITE.people[0] && <li><a href={telHref(SITE.people[0].phone)} className="ltr">{formatPhone(SITE.people[0].phone)}</a></li>}
             </ul>
           </nav>
           <nav aria-label={t.footer.legal}>
@@ -43,7 +44,7 @@ export function Footer({ lang }: { lang: Lang }) {
           </nav>
         </div>
         <div className="fine">
-          <p>© {year} {val(SITE.legalName[lang], lang)}. {t.footer.rights}</p>
+          <p>© {year} {t.brand}. {t.footer.rights}{SITE.address[lang] ? ` ${SITE.address[lang]}.` : ''}</p>
           <p>{t.footer.demoNote}</p>
           <p>{t.footer.trademarks}</p>
         </div>

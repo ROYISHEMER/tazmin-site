@@ -1,7 +1,7 @@
 import { ContactForm } from '@/components/ContactForm';
 import { dict } from '@/i18n';
 import { extra } from '@/i18n/extra';
-import { SITE, isSet, val } from '@/config/site';
+import { SITE, isSet, val, formatPhone, telHref } from '@/config/site';
 import { langOf, pageMeta, type LangParams } from '@/lib/meta';
 
 export async function generateMetadata({ params }: LangParams) {
@@ -31,9 +31,21 @@ export default async function Contact({ params }: LangParams) {
             <dt>{c.email}</dt>
             <dd>{isSet(SITE.email) ? <a className="ltr" href={`mailto:${SITE.email}`}>{SITE.email}</a> : val(null, lang)}</dd>
             <dt>{c.phone}</dt>
-            <dd>{isSet(SITE.phone) ? <a className="ltr" href={`tel:${SITE.phone.replace(/[^\d+]/g, '')}`}>{SITE.phone}</a> : val(null, lang)}</dd>
-            <dt>{c.whatsapp}</dt>
-            <dd>{isSet(SITE.whatsapp) ? <a className="ltr" href={`https://wa.me/${SITE.whatsapp}`} rel="noopener">+{SITE.whatsapp}</a> : val(null, lang)}</dd>
+            <dd>
+              <ul className="people">
+                {SITE.people.map((p) => (
+                  <li key={p.phone}>{p.name[lang]}: <a className="ltr" href={telHref(p.phone)}>{formatPhone(p.phone)}</a></li>
+                ))}
+              </ul>
+            </dd>
+            {isSet(SITE.whatsapp) && (
+              <>
+                <dt>{c.whatsapp}</dt>
+                <dd><a className="ltr" href={`https://wa.me/${SITE.whatsapp}`} rel="noopener">+{SITE.whatsapp}</a></dd>
+              </>
+            )}
+            <dt>{dict(lang).about.companyRows.address}</dt>
+            <dd>{val(SITE.address[lang], lang)}</dd>
           </dl>
         </aside>
       </div>

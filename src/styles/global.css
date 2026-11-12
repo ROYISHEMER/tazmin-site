@@ -261,3 +261,6 @@ html.a11y-motion *, html.a11y-motion *::before, html.a11y-motion *::after {
 .form-actions .form-status { flex: 1 1 16rem; margin: 0; }
 .field .err:empty { display: none; }
 .btn[disabled] { opacity: 0.6; cursor: progress; }
+
+.people { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem; }
+.kv dd { margin: 0; overflow-wrap: anywhere; }

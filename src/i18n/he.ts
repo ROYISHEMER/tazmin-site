@@ -114,7 +114,7 @@ export const he = {
     ui: {
       contact: 'אבי · א.ש. סולאר',
       online: 'מקליד…',
-      bubble: ['אחי תביא 20 פאנלים 550', '100 מטר כבל 6 שחור', 'ממיר 50 קילו כמו בפעם הקודמת'],
+      bubble: ['אחי תביא 20 פאנלים 550', '100 מטר כבל 6 שחור'],
       note: ['40 זוג MC4', '80 מהדקי קצה ל-35'],
       voice: '0:12',
       forwardTo: 'העברה אל',
@@ -124,6 +124,11 @@ export const he = {
       systems: ['רשימת לקוחות', 'היסטוריית הזמנות', 'מחירון לקוח'],
       systemTags: ['CRM', 'ERP', 'ERP'],
       identified: 'לקוח זוהה',
+      newMessage: 'הודעה חדשה',
+      identifying: 'מזהה את הלקוח…',
+      catalog: 'קטלוג',
+      rep: 'נציג',
+      orderIn: 'ההזמנה במערכת',
       customer: 'א.ש. סולאר בע״מ',
       initials: 'א.ש',
       customerRows: [
@@ -136,10 +141,10 @@ export const he = {
       sources: { text: 'טקסט', hand: 'כתב יד', voice: 'קול' },
       cols: { item: 'פריט', qty: 'כמות', price: 'מחיר' },
       lines: [
-        { raw: '20 פאנלים 550', src: 'text', qty: '20', name: 'פאנל סולארי 550W מונו', sku: 'PV-550-M', price: '8,400' },
+        { raw: 'אחי תביא 20 פאנלים 550', src: 'text', qty: '20', name: 'פאנל סולארי 550W מונו', sku: 'PV-550-M', price: '8,400' },
         { raw: '100 מטר כבל 6 שחור', src: 'text', qty: '1 גליל', name: 'כבל סולארי 6 ממ״ר שחור, 100 מ׳', sku: 'CB-6-BK-100', price: '390' },
-        { raw: '40 זוג MC4', src: 'hand', qty: '40', name: 'מחבר MC4, זוג', sku: 'MC4-PR', price: '360' },
         { raw: 'ממיר 50 קילו כמו בפעם הקודמת', src: 'voice', qty: '1', name: 'ממיר 50kW', sku: 'INV-50K', price: '14,500', alias: 'מההזמנה הקודמת' },
+        { raw: '40 זוג MC4', src: 'hand', qty: '40', name: 'מחבר MC4, זוג', sku: 'MC4-PR', price: '360' },
         { raw: '80 מהדקי קצה ל-35', src: 'hand', qty: '80', name: 'מהדק קצה 35 מ״מ, אלומיניום', sku: 'EC-35-AL', price: '480', ambiguous: true },
       ] as Line[],
       threeOptions: '3 אפשרויות',
