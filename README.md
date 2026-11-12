@@ -77,7 +77,9 @@ accounts; the site does not need them.
   `export/tazmin-landing-en.html` (about 0.9 MB each). Styles, scripts and fonts are inlined, so the
   file opens by double-click and the animation works offline. Links to other pages point at
   `SITE.url`; the form falls back to email.
-- **Live link:** deploy to Vercel (`npx vercel`), then add the environment variables above.
+- **Live link:** https://tazmin-site.vercel.app (Vercel project `tazmin-site`). Redeploy with
+  `npx vercel deploy --prod` from this folder. Lead destinations are not configured there yet:
+  add the environment variables above in the Vercel project settings.
 
 ## Before going live
 
@@ -85,7 +87,7 @@ accounts; the site does not need them.
 - [ ] Once a company is registered: put its legal name in `SITE.legalName` and add its number to the legal texts.
 - [ ] Confirm the English spellings of the founders' names and who the accessibility coordinator is (defaults to the primary contact).
 - [ ] Optional: set `SITE.whatsapp` to show a WhatsApp link on the contact page.
-- [ ] Set the real domain in `SITE.url`.
+- [ ] When you have your own domain: add it in Vercel and set `NEXT_PUBLIC_SITE_URL` to it.
 - [ ] Have a lawyer review `src/i18n/legal.ts` (the pages carry a "draft" banner; remove it in `LegalPage.tsx` once approved).
 - [ ] Name the accessibility coordinator; consider an audit by a licensed accessibility expert.
 - [ ] Configure a lead destination (database and/or email) and send a test lead.
