@@ -60,6 +60,14 @@ JavaScript, the journey renders as a plain numbered list of the nine steps.
 | WhatsApp number | `SITE.whatsapp` | currently the primary contact's mobile |
 | Email delivery of leads | `RESEND_API_KEY` in `.env.local` (and in Vercel) | leads go to `.data/leads.jsonl` locally |
 
+### Sample content for local preview
+
+`src/config/demo.ts` holds made-up customer quotes, a price line and team roles, so the layout
+can be judged before the real content exists. They appear only in `npm run dev`, only while
+`DEMO_CONTENT=1` is in `.env.local`, and each is labelled "sample content" on screen. Production
+builds, the landing export and the deployed site never include them. Real content always replaces
+the samples; once it is all in, delete `demo.ts` and its three call sites.
+
 ## Themes
 
 Light is the default. The moon/sun button in the header switches to a dark theme and remembers

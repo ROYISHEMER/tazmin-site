@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { dict, href } from '@/i18n';
 import { extra } from '@/i18n/extra';
 import { SITE, val, formatPhone, telHref } from '@/config/site';
+import { DEMO, DEMO_ROLES } from '@/config/demo';
 import { langOf, pageMeta, type LangParams } from '@/lib/meta';
 
 export async function generateMetadata({ params }: LangParams) {
@@ -31,7 +32,7 @@ export default async function About({ params }: LangParams) {
         <section aria-labelledby="team-title">
           <h2 id="team-title">{extra(lang).home.team}</h2>
           <ul className="team" role="list">
-            {SITE.people.map((p) => (
+            {SITE.people.map((p, i) => (
               <li className="team-card" key={p.phone}>
                 {p.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -40,7 +41,11 @@ export default async function About({ params }: LangParams) {
                   <span className="team-photo initials" aria-hidden="true">{p.name[lang].split(' ').map((w) => w.slice(0, 1)).join('')}</span>
                 )}
                 <b>{p.name[lang]}</b>
-                {p.role && <span className="team-role">{p.role[lang]}</span>}
+                {p.role ? (
+                  <span className="team-role">{p.role[lang]}</span>
+                ) : (
+                  DEMO && DEMO_ROLES[i] && <span className="team-role">{DEMO_ROLES[i][lang]} <span className="sample-tag">{extra(lang).home.sample}</span></span>
+                )}
                 <a className="ltr" href={telHref(p.phone)}>{formatPhone(p.phone)}</a>
               </li>
             ))}

@@ -9,6 +9,7 @@ import { VideoShowcase } from '@/components/VideoShowcase';
 import { Testimonials } from '@/components/Testimonials';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { SITE } from '@/config/site';
+import { DEMO, DEMO_PRICING } from '@/config/demo';
 import { LogoMark, Check } from '@/components/LogoMark';
 import { ASSET_BASE, dict, href } from '@/i18n';
 import { extra } from '@/i18n/extra';
@@ -185,10 +186,13 @@ export default async function Home({ params }: LangParams) {
             <h2 className="h-section">{t.faq.title}</h2>
           </div>
           <div className="faq-list">
-            {SITE.pricing[lang] && (
+            {(SITE.pricing[lang] || DEMO) && (
               <details>
-                <summary><span>{x.home.pricingQ}</span><span className="plus" aria-hidden="true" /></summary>
-                <p>{SITE.pricing[lang]}</p>
+                <summary>
+                  <span>{x.home.pricingQ}{!SITE.pricing[lang] && <span className="sample-tag">{x.home.sample}</span>}</span>
+                  <span className="plus" aria-hidden="true" />
+                </summary>
+                <p>{SITE.pricing[lang] ?? DEMO_PRICING[lang]}</p>
               </details>
             )}
             {t.faq.items.map((it) => (
