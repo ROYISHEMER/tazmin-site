@@ -331,6 +331,63 @@ function buildJourney(journey: HTMLElement) {
     .fromTo(erpNew, { backgroundColor: color('--green-soft') }, { autoAlpha: 1, backgroundColor: 'rgba(0,0,0,0)', duration: 0.16 }, 8.7)
     .to(learned, { autoAlpha: 1, y: 0, duration: 0.12 }, 8.86);
 
+  // ── The travelling message (desktop). For every step it comes down the zigzag route from the
+  // previous station, turns into this station along the dashed link, and the station reacts.
+  // Before the next step it leaves the station and carries on down the route.
+  const viz = one('.viz');
+  const token = one('[data-lane-token]');
+  const link = one('[data-lane-link]');
+  const laneRing = one('[data-lane-ring]');
+  const WRAP = [phone, phone, core, quoteSc, quoteSc, quoteSc, quoteSc, quoteSc, out];
+  const HALF_WIDTH = [8.75, 8.75, 18, 19.5, 19.5, 19.5, 19.5, 19.5, 20.7]; // em, half the width of each station
+  const ENTER_AT: Record<number, number> = { 0: 0, 3: 2.98, 8: 8.02 }; // stations that appear a little after their step starts
+  // Distance (em) from the route to the near edge of station k. Scenes sit 3.5em off-centre to make room for the route.
+  const reach = (k: number) => {
+    const em = parseFloat(getComputedStyle(viz).fontSize) || 16;
+    return Math.max(1.5, viz.clientWidth / em / 2 - 0.5 - HALF_WIDTH[k]);
+  };
+  const at = ([px, py]: number[]) => ({ x: `${(START * (px - 40)) / 10}em`, y: `${(py - 200) / 10}em` });
+  const UP = [[40, 0], [64, 30], [16, 80], [64, 130], [16, 180], [40, 200]];
+  const DOWN = [[40, 200], [16, 220], [64, 270], [16, 320], [64, 370], [40, 400]];
+  const ride = (pts: number[][], start: number, dur: number) => {
+    const len = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]));
+    const total = len.reduce((a, b) => a + b, 0);
+    let t = start;
+    len.forEach((l, i) => {
+      const d = (dur * l) / total;
+      tl.fromTo(token, at(pts[i]), { ...at(pts[i + 1]), duration: d, ease: 'none', immediateRender: false }, t);
+      t += d;
+    });
+  };
+  const inside = (k: number) => `${START * (reach(k) + 1.3)}em`; // a little past the edge, hidden behind the station
+
+  gsap.set(token, { ...at(UP[0]), autoAlpha: 1 });
+  gsap.set(laneRing, { autoAlpha: 0 });
+  tl.set(link, { width: () => `${reach(0)}em` }, 0);
+  ([[2, 1.82], [3, 3.1], [8, 8.14]] as const).forEach(([k, when]) =>
+    tl.fromTo(link, { width: () => `${reach(k - 1)}em` }, { width: () => `${reach(k)}em`, duration: 0.12, ease: 'power2.inOut', immediateRender: false }, when),
+  );
+
+  for (let k = 0; k < N; k++) {
+    // arrive
+    const start = ENTER_AT[k] ?? k - 0.14;
+    const zig = k === 0 ? 0.08 : 0.16;
+    if (k > 0) tl.fromTo(token, { autoAlpha: 0, scale: 0.6 }, { autoAlpha: 1, scale: 1, duration: 0.03, immediateRender: false }, start);
+    ride(UP, start, zig);
+    const land = start + zig + 0.05;
+    tl.fromTo(token, { x: 0, y: 0 }, { x: () => inside(k), duration: 0.05, ease: 'none', immediateRender: false }, start + zig)
+      .to(token, { autoAlpha: 0, scale: 0.5, duration: 0.02 }, land - 0.015)
+      .fromTo(laneRing, { x: () => `${START * reach(k)}em`, scale: 0.5, autoAlpha: 0.9 }, { scale: 2.6, autoAlpha: 0, duration: 0.16, ease: 'power1.out', immediateRender: false }, land)
+      .fromTo(WRAP[k], { scale: 1 }, { scale: 1.035, duration: 0.06, yoyo: true, repeat: 1, ease: 'sine.inOut', immediateRender: false }, land);
+    // leave
+    if (k < N - 1) {
+      const leave = k + 1 - 0.37;
+      tl.fromTo(token, { x: () => inside(k), y: 0, autoAlpha: 0, scale: 0.5 }, { x: 0, autoAlpha: 1, scale: 1, duration: 0.05, ease: 'none', immediateRender: false }, leave);
+      ride(DOWN, leave + 0.05, 0.15);
+      tl.to(token, { autoAlpha: 0, duration: 0.03 }, leave + 0.17);
+    }
+  }
+
   // Pad to the full length so one unit of time always equals one step of scroll.
   tl.set({}, {}, TOTAL);
 }

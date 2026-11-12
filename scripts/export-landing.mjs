@@ -57,7 +57,10 @@ function build(lang) {
   // Scripts → inline, in document order
   html = html.replace(/<script([^>]*)\ssrc="(\/_next\/[^"]+)"([^>]*)><\/script>/g, (_, a, src, b) => {
     const attrs = `${a}${b}`.replace(/\s(async|defer)(="[^"]*")?/g, '').replace(/\snoModule(="[^"]*")?/i, ' nomodule');
-    return `<script${attrs}>${readFileSync(asset(src), 'utf8').replace(/<\/script/gi, '<\\/script')}</script>`;
+    // The bundler runtime identifies each chunk by its <script src>. An inline script has none,
+    // so each one first reports the path it was built with.
+    const identify = `(function(s,u){s.getAttribute=function(n){return n==='src'?u:Element.prototype.getAttribute.call(s,n)};Object.defineProperty(s,'src',{get:function(){return new URL(u,location.href).href}})})(document.currentScript,${JSON.stringify(src)});`;
+    return `<script${attrs}>${identify}${readFileSync(asset(src), 'utf8').replace(/<\/script/gi, '<\\/script')}</script>`;
   });
 
   // Nothing left to fetch from /_next: drop preloads, inline the icon

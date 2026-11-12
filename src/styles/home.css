@@ -193,6 +193,24 @@ html.a11y-motion .marquee li[aria-hidden] { display: none; }
   .rail-stops .tick { width: 8px; height: 8px; }
 }
 
+/* ── The travelling message: dashed zigzag route on the far side of the stage ── */
+.lane { display: none; }
+@media (min-width: 901px) {
+  /* Desktop: no side rail of stations; the zigzag route carries the progress instead. */
+  .journey.anim .rail { display: none; }
+  .journey.anim .journey-stage { grid-template-columns: minmax(17rem, 27rem) minmax(0, 1fr); gap: clamp(2rem, 4vw, 5rem); }
+  .journey.anim .lane { display: block; position: absolute; inset-inline-end: 0; top: 50%; width: 8em; height: 40em; margin-top: -20em; z-index: 0; pointer-events: none; }
+  .journey.anim .sc { padding-inline-end: 7em; z-index: 1; }
+}
+.lane-svg { width: 100%; height: 100%; overflow: visible; }
+[dir='ltr'] .lane-svg { transform: scaleX(-1); }
+.lane-path { stroke: var(--teal-bright); stroke-width: 2; stroke-dasharray: 5 8; stroke-linecap: round; stroke-linejoin: round; opacity: 0.6; vector-effect: non-scaling-stroke; }
+.lane-link { position: absolute; top: 50%; inset-inline-end: 50%; width: 6em; height: 0; margin-top: -1px; border-top: 2px dashed var(--teal-bright); opacity: 0.6; }
+.lane-token, .lane-ring { position: absolute; top: 50%; left: 50%; width: 3em; height: 3em; margin: -1.5em; border-radius: 50%; }
+.lane-token { background: var(--teal); color: #fff; display: grid; place-items: center; box-shadow: 0 0 0 0.45em rgba(43, 163, 175, 0.22), 0 0.8em 1.8em rgba(11, 110, 121, 0.4); }
+.lane-token svg { width: 52%; height: 52%; }
+.lane-ring { border: 2px solid var(--teal-bright); opacity: 0; }
+
 /* ── Phone ── */
 .phone {
   position: relative; width: 17.5em; height: 35em; border-radius: 2.8em; background: #fff; border: 0.45em solid #1d1d1f;

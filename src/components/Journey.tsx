@@ -54,6 +54,17 @@ export function Journey({ lang }: { lang: Lang }) {
           </ol>
 
           <div className="viz" aria-hidden="true">
+            {/* The travelling message: comes down a dashed zigzag route on the far side of the stage
+                and turns into each station along a dashed link. Driven by <Motion>. */}
+            <div className="lane" data-lane>
+              <svg className="lane-svg" viewBox="0 0 80 400" fill="none">
+                <path className="lane-path" d="M40 0L64 30L16 80L64 130L16 180L40 200L16 220L64 270L16 320L64 370L40 400" />
+              </svg>
+              <span className="lane-link" data-lane-link />
+              <span className="lane-ring" data-lane-ring />
+              <span className="lane-token" data-lane-token><svg viewBox="0 0 24 24" fill="currentColor"><path d={BUBBLE} /></svg></span>
+            </div>
+
             {/* Scene 1: the rep's phone, customer message arriving */}
             <div className="sc sc-phone" data-phone>
               <div className="phone">
