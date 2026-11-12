@@ -59,8 +59,8 @@ there, copy the four MP4s over and regenerate the captions:
 node scripts/make-captions.mjs
 ```
 
-Known issue: the video's closing frame still shows the placeholder "[טלפון / אתר — להשלים]".
-Fix it in the video project (`s8.contact` in `src/i18n.ts`) and re-render.
+The closing frame shows the phone number and email set in the video project
+(`s8.contact` in its `src/i18n.ts`); change it there and re-render if the details change.
 
 ## Integrations section
 
