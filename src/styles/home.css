@@ -46,10 +46,6 @@
   background: #fff; color: var(--teal-text); font-weight: 700; font-size: 1em; padding: 0.45em 1em; border-radius: 999px; box-shadow: var(--shadow-card);
 }
 @media (max-width: 560px) { .hero-badge { inset-inline-end: -1.5em; top: -1.4em; } }
-  position: absolute; inset-block-end: 1.1rem; inset-inline-start: 50%; transform: translateX(-50%); z-index: 2;
-  display: grid; justify-items: center; gap: 0.35rem; font-size: 0.75rem; font-weight: 600; color: var(--muted);
-  background: rgba(245, 245, 247, 0.85); padding: 0.4rem 0.8rem; border-radius: 999px;
-}
 
 /* Load-in and looping motion only when motion is welcome */
 @media (prefers-reduced-motion: no-preference) {
