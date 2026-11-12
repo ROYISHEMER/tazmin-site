@@ -68,10 +68,16 @@ can be judged before the real content exists. They appear only in `npm run dev`,
 builds, the landing export and the deployed site never include them. Real content always replaces
 the samples; once it is all in, delete `demo.ts` and its three call sites.
 
+## Phones
+
+Below 720px a quick-contact bar (WhatsApp + "Talk to us") is pinned to the bottom of the screen
+once the visitor scrolls past the first screen; it hides while the contact form is in view
+(`src/components/MobileBar.tsx`).
+
 ## Themes
 
-Light is the default. The moon/sun button in the header switches to a dark theme and remembers
-the choice (`localStorage`, key `tazmin:theme`). Tokens live at the top of `src/styles/global.css`;
+The site follows the device's light/dark setting. The moon/sun button in the header overrides it
+and remembers the choice (`localStorage`, key `tazmin:theme`). Tokens live at the top of `src/styles/global.css`;
 pictures of light screens and paper (phones, the quote card, logo tiles) keep the light palette.
 
 ## Explainer video
@@ -101,7 +107,8 @@ systems); the drifting dashes, travelling dot and hub pulse are CSS and stop wit
 
 ## Where "Talk to us" leads go
 
-`POST /api/lead` validates the form and delivers each lead to every destination that is configured
+The form asks for a name, a company, and a phone number or an email (plus an optional note).
+`POST /api/lead` validates it and delivers each lead to every destination that is configured
 (copy `.env.example` to `.env.local`):
 
 1. **Postgres** — set `DATABASE_URL` (for example a Neon database) and run `db/schema.sql` once.

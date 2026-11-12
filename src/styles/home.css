@@ -46,26 +46,20 @@
   background: #fff; color: var(--teal-text); font-weight: 700; font-size: 1em; padding: 0.45em 1em; border-radius: 999px; box-shadow: var(--shadow-card);
 }
 @media (max-width: 560px) { .hero-badge { inset-inline-end: -1.5em; top: -1.4em; } }
-.scroll-hint {
   position: absolute; inset-block-end: 1.1rem; inset-inline-start: 50%; transform: translateX(-50%); z-index: 2;
   display: grid; justify-items: center; gap: 0.35rem; font-size: 0.75rem; font-weight: 600; color: var(--muted);
   background: rgba(245, 245, 247, 0.85); padding: 0.4rem 0.8rem; border-radius: 999px;
 }
-[dir='rtl'] .scroll-hint { transform: translateX(50%); }
-.scroll-hint span { width: 1.25rem; height: 2rem; border: 2px solid var(--muted); border-radius: 1rem; position: relative; }
-.scroll-hint span::after { content: ''; position: absolute; top: 0.3rem; left: 50%; width: 3px; height: 0.4rem; margin-left: -1.5px; border-radius: 2px; background: var(--muted); }
 
 /* Load-in and looping motion only when motion is welcome */
 @media (prefers-reduced-motion: no-preference) {
   html.js:not(.a11y-motion) .rise { animation: rise 0.9s var(--ease) backwards; animation-delay: calc(var(--d, 0) * 90ms + 80ms); }
   html.js:not(.a11y-motion) .chat-list li { animation: rise 0.6s var(--ease) backwards; animation-delay: calc(var(--i) * 110ms + 700ms); }
-  html.js:not(.a11y-motion) .scroll-hint span::after { animation: wheel 1.6s var(--ease) infinite; }
   html.js:not(.a11y-motion) .marquee-track { animation: marquee 46s linear infinite; }
   html.js:not(.a11y-motion) .typing i { animation: blink 1.2s infinite; }
   .marquee:hover .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
 }
 @keyframes rise { from { opacity: 0; transform: translateY(1.5rem); } to { opacity: 1; transform: none; } }
-@keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 70%, 100% { transform: translateY(0.7rem); opacity: 0; } }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes blink { 0%, 60%, 100% { opacity: 0.3; } 30% { opacity: 1; } }
 
@@ -380,9 +374,6 @@ html.a11y-motion .marquee li[aria-hidden] { display: none; }
 /* ───────── Principles ───────── */
 .big-lines { display: grid; gap: clamp(0.5rem, 1.5vw, 1rem); margin-block: 1rem clamp(2.5rem, 6vw, 4.5rem); }
 .big-line { font-size: clamp(2rem, 5.6vw, 4.5rem); line-height: 1.08; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
-.big-lines.center { text-align: center; margin-block: 0; }
-.big-line.xl { font-size: clamp(2.25rem, 7vw, 5.5rem); }
-.big-line.xl:last-child { color: var(--teal-text); }
 .bento { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
 .bento-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; display: grid; gap: 0.6rem; align-content: start; }
 .bento-ico { width: 2.75rem; height: 2.75rem; border-radius: 0.8rem; background: var(--teal-soft); color: var(--teal-text); display: grid; place-items: center; margin-bottom: 0.4rem; }

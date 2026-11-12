@@ -84,7 +84,6 @@ function setup(el: HTMLElement, gsap: Gsap, ScrollTrigger: ScrollTriggerType, Le
     }
     gsap.to(one('[data-hero-device]', hero), { yPercent: -7, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
     gsap.to(one('[data-hero-copy]', hero), { autoAlpha: 0, y: -40, ease: 'none', scrollTrigger: { trigger: hero, start: '25% top', end: '75% top', scrub: true } });
-    gsap.to(one('.scroll-hint', hero), { autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: '12% top', scrub: true } });
   }
 
   // ── Generic reveal

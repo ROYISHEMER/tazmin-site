@@ -30,6 +30,11 @@ export default async function Home({ params }: LangParams) {
   const lang = await langOf(params);
   const t = dict(lang);
   const x = extra(lang);
+  const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: t.faq.items.map((it) => ({ '@type': 'Question', name: it.q, acceptedAnswer: { '@type': 'Answer', text: it.a } })),
+  };
 
   return (
     <Motion>
@@ -179,6 +184,8 @@ export default async function Home({ params }: LangParams) {
       </section>
 
       {/* ───────── FAQ ───────── */}
+      {/* The same questions as structured data, so search engines can show them with the result */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <section className="faq" id="faq">
         <div className="wrap faq-in">
           <div>

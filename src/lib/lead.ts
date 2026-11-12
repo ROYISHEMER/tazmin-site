@@ -16,7 +16,7 @@ export interface Lead {
   page: string;
 }
 
-export type LeadErrorCode = 'required' | 'email' | 'phone' | 'consent' | 'too_long';
+export type LeadErrorCode = 'required' | 'email' | 'phone' | 'contact' | 'consent' | 'too_long';
 export type LeadErrors = Partial<Record<keyof Lead | 'consent', LeadErrorCode>>;
 export type LeadResult =
   | { ok: true; lead: Lead }
@@ -55,9 +55,11 @@ export function validateLead(input: unknown): LeadResult {
   };
 
   const errors: LeadErrors = {};
-  (['name', 'company', 'email'] as const).forEach((k) => {
+  (['name', 'company'] as const).forEach((k) => {
     if (!lead[k]) errors[k] = 'required';
   });
+  // One way to get back to them is enough: a phone number or an email address.
+  if (!lead.phone && !lead.email) errors.phone = 'contact';
   if (lead.email && !EMAIL.test(lead.email)) errors.email = 'email';
   if (lead.phone && !PHONE.test(lead.phone)) errors.phone = 'phone';
   (Object.keys(MAX) as (keyof Lead)[]).forEach((k) => {

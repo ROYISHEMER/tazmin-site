@@ -46,7 +46,7 @@
 }
 html[lang='en'] { --font: var(--font-en); }
 
-/* ───────── Dark theme (opt-in from the header; light stays the default) ───────── */
+/* ───────── Dark theme: follows the device setting unless the visitor picks one in the header ───────── */
 html[data-theme='dark'] {
   color-scheme: dark;
   --bg: #0f151d;
@@ -313,7 +313,6 @@ html.a11y-motion *, html.a11y-motion *::before, html.a11y-motion *::after {
 .contact-side { display: grid; gap: 1rem; }
 .contact-side h2 { font-size: 1.25rem; }
 @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; } }
-.kv-row { display: contents; }
 .page-head .meta { color: var(--muted); font-size: 0.9375rem; }
 .form-set { border: 0; padding: 0; margin: 0; display: grid; gap: 1.1rem; min-width: 0; }
 .hp { position: absolute; inset-inline-start: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -335,3 +334,24 @@ html.a11y-motion *, html.a11y-motion *::before, html.a11y-motion *::after {
 
 /* Marks made-up preview content (src/config/demo.ts); only ever visible in a local preview */
 .sample-tag { display: inline-block; vertical-align: middle; margin-inline-start: 0.6em; font-size: 0.75rem; font-weight: 700; line-height: 1.4; letter-spacing: 0; padding: 0.15rem 0.6rem; border-radius: 999px; background: var(--amber-soft); color: var(--amber); border: 1px dashed currentColor; white-space: nowrap; }
+
+.contact-hint { margin-top: -0.6rem; color: var(--muted); font-size: 0.875rem; }
+
+/* Phones: quick-contact bar pinned to the bottom (MobileBar.tsx) */
+.mbar { display: none; }
+@media (max-width: 720px) {
+  .mbar {
+    position: fixed; inset: auto 0 0; z-index: 140; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.6rem;
+    padding: 0.6rem var(--gutter) calc(0.6rem + env(safe-area-inset-bottom, 0px));
+    background: var(--header-bg); -webkit-backdrop-filter: saturate(180%) blur(18px); backdrop-filter: saturate(180%) blur(18px);
+    border-top: 1px solid var(--line); transform: translateY(110%); visibility: hidden;
+    transition: transform 0.35s var(--ease), visibility 0s 0.35s;
+  }
+  .mbar.show { transform: none; visibility: visible; transition: transform 0.35s var(--ease); }
+  .mbar .btn { min-height: 2.9rem; padding-inline: 0.75rem; }
+  .mbar .btn svg { width: 1.25em; height: 1.25em; flex: none; }
+  /* keep the accessibility button and the page end clear of the bar */
+  html.has-mbar .a11y-fab { inset-block-end: 4.9rem; }
+  html.has-mbar .a11y-panel { inset-block-end: 8.6rem; }
+  .site-footer { padding-bottom: 5.5rem; }
+}

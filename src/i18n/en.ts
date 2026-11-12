@@ -29,7 +29,6 @@ export const en: Dict = {
     title: ['How many orders', 'came in ', 'today?'],
     sub: 'And how many did someone retype, line by line? Tazmin turns a messy WhatsApp message into a clean quote. Your rep just approves.',
     cta: 'Send us real orders from this week',
-    secondary: 'Scroll to follow one order',
     chats: 'Chats',
     newMessages: 'new messages',
     chatList: [
@@ -61,7 +60,6 @@ export const en: Dict = {
     eyebrow: 'The path of an order',
     title: 'From a WhatsApp message to an order in your system',
     lead: 'Keep scrolling. The message moves from station to station.',
-    progressLabel: 'Order progress',
     staticNote: 'Animation is off. These are the nine steps an order goes through:',
     steps: [
       {
@@ -291,7 +289,6 @@ export const en: Dict = {
     q: 'Want to see it on your own data?',
     title: 'Send us real orders from this week',
     slogan: 'Order in your orders. Peace for your reps.',
-    button: 'Contact us',
   },
 
   footer: {
@@ -355,7 +352,7 @@ export const en: Dict = {
       },
     ],
     companyTitle: 'Company details',
-    companyRows: { name: 'Name', id: 'Company no.', address: 'Address', email: 'Email', phone: 'Phone' },
+    companyRows: { name: 'Name', address: 'Address', email: 'Email', phone: 'Phone' },
   },
 
   contact: {
@@ -372,12 +369,8 @@ export const en: Dict = {
       company: 'Company name',
       email: 'Email',
       phone: 'Phone',
-      erp: 'ERP system',
-      erpOptions: ['Priority', 'SAP Business One', 'Hashavshevet', 'Rivhit', 'Excel / Google Sheets', 'Other'],
-      choose: 'Choose',
       message: 'A few words about your orders',
       messageHint: 'For example: how many orders a day, and through which channel they arrive.',
-      required: 'Required',
       optional: 'Optional',
       consent: 'I have read the privacy policy and agree that my details will be used to contact me about this enquiry.',
       submit: 'Send',
@@ -387,8 +380,6 @@ export const en: Dict = {
       errorEmail: 'Please enter a valid email address.',
       errorConsent: 'Consent is required to send the enquiry.',
       errorSummary: 'Some fields need fixing:',
-      notConfigured: 'The site’s email address has not been configured yet. Your details were not sent.',
-      opened: 'We opened your email app. If it did not open, you can write to us directly at the address on this page.',
     },
   },
 

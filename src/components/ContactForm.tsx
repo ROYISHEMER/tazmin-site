@@ -10,7 +10,8 @@ import { validateLead, leadToText, type LeadErrors } from '@/lib/lead';
 type Status = { kind: 'idle' } | { kind: 'sending' } | { kind: 'ok' } | { kind: 'bad'; text: string };
 
 /**
- * "Talk to us" form. Posts JSON to /api/lead. If that endpoint is unavailable (for example
+ * "Talk to us" form: name, company, and a phone number or an email. Everything else is asked
+ * on the call. Posts JSON to /api/lead. If that endpoint is unavailable (for example
  * the single-file landing page opened from disk) it falls back to the visitor's email app.
  */
 export function ContactForm({ lang, id = 'lead' }: { lang: Lang; id?: string }) {
@@ -21,7 +22,7 @@ export function ContactForm({ lang, id = 'lead' }: { lang: Lang; id?: string }) 
   const started = useRef(Date.now());
   const formRef = useRef<HTMLFormElement>(null);
   const fid = (n: string) => `${id}-${n}`;
-  const msg: Record<string, string> = { required: f.errorRequired, email: f.errorEmail, phone: x.errorPhone, consent: f.errorConsent, too_long: f.errorRequired };
+  const msg: Record<string, string> = { required: f.errorRequired, email: f.errorEmail, phone: x.errorPhone, contact: x.errorContact, consent: f.errorConsent, too_long: f.errorRequired };
   const errText = (k: keyof LeadErrors) => (errors[k] ? msg[errors[k]!] : '');
 
   const fail = (errs: LeadErrors) => {
@@ -89,45 +90,17 @@ export function ContactForm({ lang, id = 'lead' }: { lang: Lang; id?: string }) 
         </div>
         <div className="row2">
           <div className="field">
-            <label htmlFor={fid('email')}>{f.email} {req}</label>
-            <input id={fid('email')} name="email" type="email" autoComplete="email" inputMode="email" dir="ltr" required aria-invalid={invalid('email')} aria-describedby={fid('email-err')} />
-            <p className="err" id={fid('email-err')}>{errText('email')}</p>
-          </div>
-          <div className="field">
-            <label htmlFor={fid('phone')}>{f.phone} {opt}</label>
-            <input id={fid('phone')} name="phone" type="tel" autoComplete="tel" inputMode="tel" dir="ltr" aria-invalid={invalid('phone')} aria-describedby={fid('phone-err')} />
+            <label htmlFor={fid('phone')}>{f.phone}</label>
+            <input id={fid('phone')} name="phone" type="tel" autoComplete="tel" inputMode="tel" dir="ltr" aria-invalid={invalid('phone')} aria-describedby={`${fid('phone-err')} ${fid('contact-hint')}`} />
             <p className="err" id={fid('phone-err')}>{errText('phone')}</p>
           </div>
-        </div>
-        <div className="row2">
           <div className="field">
-            <label htmlFor={fid('role')}>{x.role} {opt}</label>
-            <input id={fid('role')} name="role" type="text" autoComplete="organization-title" />
-          </div>
-          <div className="field">
-            <label htmlFor={fid('vertical')}>{x.vertical} {opt}</label>
-            <select id={fid('vertical')} name="vertical" defaultValue="">
-              <option value="">{f.choose}</option>
-              {x.verticalOptions.map((o) => <option key={o}>{o}</option>)}
-            </select>
+            <label htmlFor={fid('email')}>{f.email}</label>
+            <input id={fid('email')} name="email" type="email" autoComplete="email" inputMode="email" dir="ltr" aria-invalid={invalid('email')} aria-describedby={`${fid('email-err')} ${fid('contact-hint')}`} />
+            <p className="err" id={fid('email-err')}>{errText('email')}</p>
           </div>
         </div>
-        <div className="row2">
-          <div className="field">
-            <label htmlFor={fid('erp')}>{f.erp} {opt}</label>
-            <select id={fid('erp')} name="erp" defaultValue="">
-              <option value="">{f.choose}</option>
-              {f.erpOptions.map((o) => <option key={o}>{o}</option>)}
-            </select>
-          </div>
-          <div className="field">
-            <label htmlFor={fid('volume')}>{x.volume} {opt}</label>
-            <select id={fid('volume')} name="volume" defaultValue="">
-              <option value="">{f.choose}</option>
-              {x.volumeOptions.map((o) => <option key={o}>{o}</option>)}
-            </select>
-          </div>
-        </div>
+        <p className="hint contact-hint" id={fid('contact-hint')}>{x.contactHint}</p>
         <div className="field">
           <label htmlFor={fid('message')}>{f.message} {opt}</label>
           <textarea id={fid('message')} name="message" rows={4} aria-describedby={fid('message-hint')} />

@@ -18,7 +18,8 @@ export function Header({ lang }: { lang: Lang }) {
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(false);
 
-  // The theme is applied before paint by the boot script in the layout; mirror it here.
+  // The theme is applied before paint by the boot script in the layout (saved choice, or the
+  // device setting when there is none); mirror it here.
   useEffect(() => setDark(document.documentElement.dataset.theme === 'dark'), []);
   const toggleTheme = () => {
     const next = !dark;

@@ -32,7 +32,7 @@ async function toEmail(key: string, to: string, from: string, lead: Lead) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ from, to: [to], reply_to: lead.email, subject: `New lead: ${lead.company} (${lead.name})`, text: leadToText(lead) }),
+    body: JSON.stringify({ from, to: [to], ...(lead.email ? { reply_to: lead.email } : {}), subject: `New lead: ${lead.company} (${lead.name})`, text: leadToText(lead) }),
   });
   if (!res.ok) throw new Error(`Resend responded ${res.status}`);
 }
