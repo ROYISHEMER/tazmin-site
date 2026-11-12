@@ -5,8 +5,9 @@ import { Motion } from '@/components/Motion';
 import { Journey } from '@/components/Journey';
 import { ContactForm } from '@/components/ContactForm';
 import { Integrations } from '@/components/Integrations';
+import { VideoShowcase } from '@/components/VideoShowcase';
 import { LogoMark, Check } from '@/components/LogoMark';
-import { dict, href } from '@/i18n';
+import { ASSET_BASE, dict, href } from '@/i18n';
 import { extra } from '@/i18n/extra';
 import { langOf, type LangParams } from '@/lib/meta';
 
@@ -41,7 +42,7 @@ export default async function Home({ params }: LangParams) {
           <p className="lead rise" style={d(3)}>{t.hero.sub}</p>
           <div className="hero-actions rise" style={d(4)}>
             <a className="btn lg" href="#talk">{t.hero.cta}</a>
-            <a className="btn lg ghost" href="#how">{x.nav.how}</a>
+            <a className="btn lg ghost" href="#video"><span className="play-i" aria-hidden="true" />{x.video.watch}</a>
           </div>
         </div>
         <div className="hero-device rise" style={d(5)} aria-hidden="true" data-hero-device>
@@ -69,6 +70,9 @@ export default async function Home({ params }: LangParams) {
           {x.home.marquee.map((m) => <li key={`dup-${m}`} aria-hidden="true">{m}</li>)}
         </ul>
       </section>
+
+      {/* ───────── Explainer video ───────── */}
+      <VideoShowcase lang={lang} base={ASSET_BASE} />
 
       {/* ───────── Problem ───────── */}
       <section className="problem" data-problem>

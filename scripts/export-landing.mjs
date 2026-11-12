@@ -5,7 +5,8 @@
  *
  * Styles, scripts and the Hebrew/Latin fonts are inlined, so the file can be sent by
  * email or WhatsApp and opened by double-click, with the scroll animation working offline.
- * Links to other pages point at the live site (SITE.url in src/config/site.ts).
+ * Links to other pages, and the explainer video with its poster and captions, point at the
+ * live site (SITE.url in src/config/site.ts), so those need an internet connection.
  *
  * Usage: npm run export:landing
  */

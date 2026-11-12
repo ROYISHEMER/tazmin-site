@@ -10,6 +10,15 @@ const he = {
     talkEyebrow: 'דברו איתנו',
     scrollHint: 'גללו',
   },
+  video: {
+    eyebrow: 'סרטון',
+    title: 'כל הסיפור בסרטון קצר',
+    lead: 'מההודעה המבולגנת ועד ההזמנה במערכת. עם קריינות וכתוביות.',
+    play: 'הפעלת הסרטון',
+    watch: 'צפו בסרטון',
+    captions: 'כתוביות',
+    durations: { wide: '1:09', tall: '0:35' },
+  },
   how: {
     title: 'איך זה עובד',
     metaDescription: 'הסבר מפורט: מה קורה להזמנה מהרגע שהלקוח כותב בוואטסאפ ועד שהיא נכנסת למערכת ה-ERP.',
@@ -119,6 +128,15 @@ const en: Extra = {
     journeyMore: 'The full explanation of every step',
     talkEyebrow: 'Talk to us',
     scrollHint: 'Scroll',
+  },
+  video: {
+    eyebrow: 'Video',
+    title: 'The whole story in a short video',
+    lead: 'From the messy message to the order in your system. Narrated, with captions.',
+    play: 'Play the video',
+    watch: 'Watch the video',
+    captions: 'Captions',
+    durations: { wide: '1:12', tall: '0:37' },
   },
   how: {
     title: 'How it works',

@@ -111,6 +111,12 @@ export function Motion({ children }: { children: ReactNode }) {
         });
       }
 
+      // ── Explainer video: the frame grows into place as it enters the screen
+      const frame = one('[data-video-frame]');
+      if (frame) {
+        gsap.fromTo(frame, { scale: 0.86, y: 40 }, { scale: 1, y: 0, ease: 'none', scrollTrigger: { trigger: frame, start: 'top 95%', end: 'top 40%', scrub: 0.4 } });
+      }
+
       // ── Integrations: WhatsApp → line → Tazmin → line → the systems, in that order
       const flow = one('[data-flow]');
       if (flow) {

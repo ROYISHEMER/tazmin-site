@@ -46,6 +46,22 @@ How much scrolling the whole journey takes is one number: the `58vh` per step in
 With `prefers-reduced-motion`, with "Stop animations" in the accessibility menu, or without
 JavaScript, the journey renders as a plain numbered list of the nine steps.
 
+## Explainer video
+
+`src/components/VideoShowcase.tsx` plays the narrated explainer from `public/video/`:
+`<lang>-wide.mp4` (16:9) on wider screens and `<lang>-tall.mp4` (9:16) on phones, each with a
+poster (`.jpg`) and captions (`.vtt`). Nothing downloads until the visitor presses play.
+
+The files come from the separate video project (`~/promo-video/out/final/`). After re-rendering
+there, copy the four MP4s over and regenerate the captions:
+
+```bash
+node scripts/make-captions.mjs
+```
+
+Known issue: the video's closing frame still shows the placeholder "[טלפון / אתר — להשלים]".
+Fix it in the video project (`s8.contact` in `src/i18n.ts`) and re-render.
+
 ## Integrations section
 
 `src/components/Integrations.tsx` shows the channel (WhatsApp), Tazmin, and the systems an order

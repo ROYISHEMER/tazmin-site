@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import type { Viewport } from 'next';
 import { notFound } from 'next/navigation';
-import Script from 'next/script';
 import '@fontsource-variable/heebo';
 import '@fontsource-variable/inter';
 import '@fontsource/ibm-plex-mono/400.css';
@@ -43,7 +42,9 @@ export default async function RootLayout({ children, params }: { children: React
     // The boot script adds classes to <html> before hydration, hence suppressHydrationWarning.
     <html lang={lang} dir={dirOf(lang)} suppressHydrationWarning>
       <head>
-        <Script id="a11y-boot" strategy="beforeInteractive">{A11Y_BOOT}</Script>
+        {/* A plain inline script: it must run while the HTML is being parsed, before anything paints.
+            (next/script would run it only once the framework boots, which made the hero flash.) */}
+        <script dangerouslySetInnerHTML={{ __html: A11Y_BOOT }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       </head>
       <body>

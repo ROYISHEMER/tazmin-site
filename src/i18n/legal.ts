@@ -40,6 +40,7 @@ export const LEGAL: Docs = {
             'תמיכה בעברית (ימין לשמאל) ובאנגלית, עם הגדרת שפה נכונה לקוראי מסך.',
             'האנימציות באתר מופעלות בגלילה בלבד. הן נעצרות אוטומטית כשמוגדרת במכשיר העדפה להפחתת תנועה, ואפשר לעצור אותן מתפריט הנגישות.',
             'לאיורים המונפשים יש חלופה טקסטואלית מלאה, והם מוסתרים מקוראי מסך.',
+            'לסרטון ההסבר יש כתוביות, והוא אינו מתנגן אוטומטית.',
           ],
         },
         {
@@ -92,6 +93,7 @@ export const LEGAL: Docs = {
             'Hebrew (right-to-left) and English, with the correct language declared for screen readers.',
             'Animations run only in response to scrolling. They stop automatically when your device asks for reduced motion, and can be stopped from the accessibility menu.',
             'Animated illustrations have a full text alternative and are hidden from screen readers.',
+            'The explainer video has captions and never plays automatically.',
           ],
         },
         {

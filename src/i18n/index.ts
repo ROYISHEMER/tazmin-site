@@ -24,6 +24,9 @@ export const href = (path: string, lang: Lang): string => {
   return `/${lang}${path === '/' ? '' : path}`;
 };
 
+/** Prefix for files in /public: empty on the site, the live origin in the standalone landing file. */
+export const ASSET_BASE = STANDALONE ? SITE.url : '';
+
 /** Link to a section of the home page. */
 export const homeAnchor = (id: string, lang: Lang): string => (STANDALONE ? `#${id}` : `/${lang}#${id}`);
 
