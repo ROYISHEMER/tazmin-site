@@ -160,7 +160,7 @@ export const LEGAL: Docs = {
           id: 'cookies',
           h: 'עוגיות ואחסון מקומי',
           p: [
-            'האתר אינו משתמש בעוגיות פרסום או מעקב, ואינו מטמיע כלי ניתוח של צד שלישי. הגופנים מוגשים מהשרת שלנו ולא מצד שלישי.',
+            'האתר אינו משתמש בעוגיות פרסום או מעקב. כדי לדעת כמה צפיות יש בכל עמוד אנחנו משתמשים במדידה אנונימית של ספק האחסון (Vercel Web Analytics), שאינה שומרת עוגיות ואינה מזהה מבקרים. הגופנים מוגשים מהשרת שלנו ולא מצד שלישי.',
             'האתר שומר בדפדפן שלכם (localStorage) את העדפות הנגישות בלבד. אפשר למחוק אותן דרך הגדרות הדפדפן או בלחיצה על ״איפוס״ בתפריט הנגישות.',
             'אם נוסיף בעתיד כלי מדידה או עוגיות שאינן הכרחיות, נעדכן את המדיניות ונבקש הסכמה במקום שבו היא נדרשת.',
           ],
@@ -258,7 +258,7 @@ export const LEGAL: Docs = {
           id: 'cookies',
           h: 'Cookies and local storage',
           p: [
-            'The site uses no advertising or tracking cookies and embeds no third-party analytics. Fonts are served from our own server, not from a third party.',
+            'The site uses no advertising or tracking cookies. To know how many views each page gets we use our hosting provider’s anonymous measurement (Vercel Web Analytics), which stores no cookies and does not identify visitors. Fonts are served from our own server, not from a third party.',
             'The site stores only your accessibility preferences in your browser (localStorage). You can delete them in your browser settings or by pressing “Reset” in the accessibility menu.',
             'If we add measurement tools or non-essential cookies in the future, we will update this policy and ask for consent where it is required.',
           ],

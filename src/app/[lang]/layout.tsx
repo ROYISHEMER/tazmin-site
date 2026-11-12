@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Viewport } from 'next';
 import { notFound } from 'next/navigation';
+import { Analytics } from '@vercel/analytics/next';
 import '@fontsource-variable/heebo';
 import '@fontsource-variable/inter';
 import '@fontsource/ibm-plex-mono/400.css';
@@ -23,8 +24,8 @@ export async function generateMetadata({ params }: LangParams) {
   return { ...pageMeta(isLang(lang) ? lang : 'he', '/'), icons: { icon: '/favicon.svg' } };
 }
 
-// Applies saved accessibility preferences before first paint (no flash of the default look).
-const A11Y_BOOT = `(function(){var c=document.documentElement.classList;c.add('js');try{var p=JSON.parse(localStorage.getItem('tazmin:a11y')||'{}');if(p.text===1)c.add('a11y-text-1');if(p.text===2)c.add('a11y-text-2');if(p.contrast)c.add('a11y-contrast');if(p.links)c.add('a11y-links');if(p.readable)c.add('a11y-readable');if(p.motion)c.add('a11y-motion');}catch(e){}})();`;
+// Applies saved accessibility preferences and the chosen theme before first paint (no flash of the default look).
+const A11Y_BOOT = `(function(){var c=document.documentElement.classList;c.add('js');try{var p=JSON.parse(localStorage.getItem('tazmin:a11y')||'{}');if(p.text===1)c.add('a11y-text-1');if(p.text===2)c.add('a11y-text-2');if(p.contrast)c.add('a11y-contrast');if(p.links)c.add('a11y-links');if(p.readable)c.add('a11y-readable');if(p.motion)c.add('a11y-motion');if(localStorage.getItem('tazmin:theme')==='dark')document.documentElement.dataset.theme='dark';}catch(e){}})();`;
 
 export default async function RootLayout({ children, params }: { children: ReactNode } & LangParams) {
   const { lang } = await params;
@@ -53,6 +54,8 @@ export default async function RootLayout({ children, params }: { children: React
         <main id="main" tabIndex={-1}>{children}</main>
         <Footer lang={lang} />
         <A11yMenu lang={lang} />
+        {/* Page-view counts without cookies. Only reports once Web Analytics is switched on in Vercel. */}
+        <Analytics />
       </body>
     </html>
   );

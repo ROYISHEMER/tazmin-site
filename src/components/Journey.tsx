@@ -13,6 +13,8 @@ import { dict, type Lang } from '@/i18n';
 const BARS = [5, 9, 14, 8, 12, 16, 7, 11, 15, 6, 10, 13, 5, 9, 12, 7, 4];
 const BUBBLE = 'M4 5h16v11h-9l-4 3v-3H4z';
 const pad = (n: number) => String(n).padStart(2, '0');
+// Triangle wave with eight teeth: down, up, down… (matches --zig set by <Motion>)
+const ZIG = 'M0 12' + Array.from({ length: 8 }, (_, k) => `L${50 + 100 * k} ${k % 2 ? 5 : 19}`).join('') + 'L800 12';
 
 export function Journey({ lang }: { lang: Lang }) {
   const t = dict(lang);
@@ -33,6 +35,10 @@ export function Journey({ lang }: { lang: Lang }) {
         <div className="journey-stage" data-stage>
           <div className="rail" aria-hidden="true">
             <div className="rail-line"><span className="rail-fill" /></div>
+            {/* Phones: the route is a dashed zigzag across the top; it crosses the centre at every stop */}
+            <svg className="rail-zig" viewBox="0 0 800 24" preserveAspectRatio="none" fill="none">
+              <path d={ZIG} />
+            </svg>
             <span className="rail-msg"><svg viewBox="0 0 24 24" fill="currentColor"><path d={BUBBLE} /></svg></span>
             <ol className="rail-stops" role="list">
               {j.steps.map((s, i) => (

@@ -33,7 +33,7 @@ function BrandLogo({ id, name }: { id: string; name: string }) {
   const ext = ['svg', 'png', 'webp'].find((e) => existsSync(join(process.cwd(), 'public', 'logos', `${id}.${e}`)));
   if (ext) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={`/logos/${id}.${ext}`} alt="" loading="lazy" />;
+    return <img src={`/logos/${id}.${ext}`} alt="" />;
   }
   return <span className="monogram" aria-hidden="true">{name.trim().slice(0, 1)}</span>;
 }

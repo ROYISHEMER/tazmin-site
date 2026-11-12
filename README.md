@@ -5,7 +5,7 @@ Hebrew (default, RTL) and English.
 
 - **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · GSAP ScrollTrigger (`@gsap/react`) · Lenis
 - **Pages:** home (scroll journey), How it works, Talk to us, About, Accessibility statement, Privacy policy, Terms of use, 404
-- **No tracking:** no analytics, no third-party cookies; fonts are self-hosted
+- **Privacy:** no cookies and no ad tracking; anonymous page-view counts via Vercel Web Analytics (switch it on in the Vercel project to start collecting); fonts are self-hosted
 
 ## Run it
 
@@ -38,13 +38,33 @@ dictionaries and is labelled "demo data" on screen.
 The journey section is a tall track with a `position: sticky` stage. One GSAP timeline is scrubbed
 by scroll, one unit of time per step; scenes (phone, customer lookup, quote card, outcome) change
 in place. On desktop a message token travels down a dashed zigzag route on the far side of the
-stage, turns into each scene along a dashed link, and the scene reacts when it arrives.
+stage, turns into each scene along a dashed link, and the scene reacts when it arrives. On phones
+the route is a dashed zigzag across the top that the token rides from stop to stop.
+
+The animation libraries (GSAP, ScrollTrigger, Lenis) are loaded on demand after the page is
+interactive; with reduced motion they are never fetched.
 
 How much scrolling the whole journey takes is one number: the `58vh` per step in
 `.journey.anim .journey-track` (`src/styles/home.css`). Lower is shorter.
 
 With `prefers-reduced-motion`, with "Stop animations" in the accessibility menu, or without
 JavaScript, the journey renders as a plain numbered list of the nine steps.
+
+## Things you fill in when you have them
+
+| What | Where | Until then |
+|---|---|---|
+| Customer quotes | `src/config/testimonials.ts` | the section is not rendered |
+| Price / pilot offer line | `SITE.pricing` in `src/config/site.ts` | no pricing question in the FAQ |
+| Team roles and photos | `role`, `photo` on each person in `src/config/site.ts` | name, initials and phone only |
+| WhatsApp number | `SITE.whatsapp` | currently the primary contact's mobile |
+| Email delivery of leads | `RESEND_API_KEY` in `.env.local` (and in Vercel) | leads go to `.data/leads.jsonl` locally |
+
+## Themes
+
+Light is the default. The moon/sun button in the header switches to a dark theme and remembers
+the choice (`localStorage`, key `tazmin:theme`). Tokens live at the top of `src/styles/global.css`;
+pictures of light screens and paper (phones, the quote card, logo tiles) keep the light palette.
 
 ## Explainer video
 

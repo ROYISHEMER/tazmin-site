@@ -1,160 +1,179 @@
 'use client';
 
-import { useRef, type ReactNode } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
-import Lenis from 'lenis';
+import { useEffect, useRef, type ReactNode } from 'react';
 import 'lenis/dist/lenis.css';
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+type Gsap = typeof import('gsap').gsap;
+type ScrollTriggerType = typeof import('gsap/ScrollTrigger').ScrollTrigger;
+type LenisType = typeof import('lenis').default;
 
 /**
  * Scroll-driven motion for everything rendered inside it. The children are ordinary
  * server-rendered markup; this component only finds elements by their data-* hooks.
  *
+ * The animation libraries (GSAP, ScrollTrigger, Lenis) are loaded on demand, after the
+ * page is interactive, so they are not part of the first download.
+ *
  * Nothing here runs when the visitor prefers reduced motion or has turned on
  * "stop animations" in the accessibility menu: the page then stays in its static,
- * fully readable state.
+ * fully readable state, and the libraries are never fetched.
  */
 export function Motion({ children }: { children: ReactNode }) {
   const root = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const el = root.current;
-      if (!el) return;
-      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('a11y-motion');
-      if (still) return;
+  useEffect(() => {
+    const el = root.current;
+    if (!el) return;
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('a11y-motion');
+    if (still) return;
 
-      const all = (s: string, within: Element = el) => gsap.utils.toArray<HTMLElement>(within.querySelectorAll(s));
-      const one = (s: string, within: Element = el) => within.querySelector<HTMLElement>(s);
+    let cancelled = false;
+    let teardown = () => {};
+
+    void (async () => {
+      const [{ gsap }, { ScrollTrigger }, { default: Lenis }] = await Promise.all([import('gsap'), import('gsap/ScrollTrigger'), import('lenis')]);
+      if (cancelled) return; // unmounted while loading
+      gsap.registerPlugin(ScrollTrigger);
       const cleanups: (() => void)[] = [];
+      // Everything GSAP creates inside the context is reverted in one call on unmount.
+      const ctx = gsap.context(() => setup(el, gsap, ScrollTrigger, Lenis, cleanups), el);
+      teardown = () => {
+        cleanups.forEach((fn) => fn());
+        ctx.revert();
+      };
+    })();
 
-      // ── Smooth wheel scrolling (desktop pointers only; touch keeps native momentum)
-      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        const lenis = new Lenis({ lerp: 0.11, anchors: true });
-        lenis.on('scroll', ScrollTrigger.update);
-        const raf = (time: number) => lenis.raf(time * 1000);
-        gsap.ticker.add(raf);
-        gsap.ticker.lagSmoothing(0);
-        cleanups.push(() => {
-          gsap.ticker.remove(raf);
-          lenis.destroy();
-        });
-      }
-
-      // ── Page progress bar
-      const bar = one('[data-progress]');
-      if (bar) gsap.to(bar, { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
-
-      // ── Hero: counter on load, device drifts as you scroll away
-      const hero = one('[data-hero]');
-      if (hero) {
-        const count = one('[data-count]', hero);
-        if (count) {
-          const target = Number(count.dataset.count) || 0;
-          const c = { v: 0 };
-          gsap.to(c, { v: target, duration: 2.2, delay: 1, ease: 'power2.out', onUpdate: () => (count.textContent = String(Math.round(c.v))) });
-        }
-        gsap.to(one('[data-hero-device]', hero), { yPercent: -7, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-        gsap.to(one('[data-hero-copy]', hero), { autoAlpha: 0, y: -40, ease: 'none', scrollTrigger: { trigger: hero, start: '25% top', end: '75% top', scrub: true } });
-        gsap.to(one('.scroll-hint', hero), { autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: '12% top', scrub: true } });
-      }
-
-      // ── Generic reveal
-      const reveals = all('[data-reveal]');
-      if (reveals.length) {
-        gsap.set(reveals, { autoAlpha: 0, y: 28 });
-        ScrollTrigger.batch(reveals, {
-          start: 'top 90%',
-          once: true,
-          onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true }),
-        });
-      }
-
-      // ── Big statements that "ink in" as they cross the viewport
-      all('[data-line]').forEach((line) => {
-        gsap.fromTo(line, { opacity: 0.14 }, { opacity: 1, ease: 'none', scrollTrigger: { trigger: line, start: 'top 85%', end: 'top 52%', scrub: true } });
-      });
-
-      // ── Problem: message cards fly in, then drain of colour when "everything stalls"
-      const problem = one('[data-problem]');
-      if (problem) {
-        const cards = all('[data-p-card]', problem);
-        gsap.from(cards, {
-          y: 90,
-          x: (i) => (i - 1.5) * 50,
-          scale: 0.85,
-          autoAlpha: 0,
-          stagger: 0.08,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: cards[0], start: 'top 92%', end: 'top 45%', scrub: 0.6 },
-        });
-        const stuck = one('[data-stuck]', problem);
-        if (stuck) {
-          gsap.to(cards, { filter: 'grayscale(1) opacity(0.5)', ease: 'none', scrollTrigger: { trigger: stuck, start: 'top 85%', end: 'top 50%', scrub: true } });
-          gsap.from(stuck.querySelector('strong'), { scale: 0.86, opacity: 0.15, ease: 'none', scrollTrigger: { trigger: stuck, start: 'top 85%', end: 'top 50%', scrub: true } });
-        }
-      }
-
-      // ── Cursor spotlight on cards (pointer devices only)
-      if (window.matchMedia('(hover: hover)').matches) {
-        all('[data-spot]').forEach((card) => {
-          const move = (e: PointerEvent) => {
-            const r = card.getBoundingClientRect();
-            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-            card.style.setProperty('--my', `${e.clientY - r.top}px`);
-          };
-          card.addEventListener('pointermove', move);
-          cleanups.push(() => card.removeEventListener('pointermove', move));
-        });
-      }
-
-      // ── Explainer video: the frame grows into place as it enters the screen
-      const frame = one('[data-video-frame]');
-      if (frame) {
-        gsap.fromTo(frame, { scale: 0.86, y: 40 }, { scale: 1, y: 0, ease: 'none', scrollTrigger: { trigger: frame, start: 'top 95%', end: 'top 40%', scrub: 0.4 } });
-      }
-
-      // ── Integrations: WhatsApp → line → Tazmin → line → the systems, in that order
-      const flow = one('[data-flow]');
-      if (flow) {
-        const rtl = getComputedStyle(flow).direction === 'rtl';
-        const lines = all('[data-flow-line]', flow);
-        const origin = rtl ? '100% 0%' : '0% 0%';
-        gsap
-          .timeline({ defaults: { ease: 'power3.out' }, scrollTrigger: { trigger: flow, start: 'top 78%', once: true } })
-          .from(all('[data-flow-in]', flow), { autoAlpha: 0, scale: 0.85, y: 24, duration: 0.6 })
-          .from(lines[0], { scale: 0, transformOrigin: origin, duration: 0.4, ease: 'power2.inOut' }, '-=0.15')
-          .from(one('[data-flow-hub]', flow), { autoAlpha: 0, scale: 0.4, duration: 0.5, ease: 'back.out(2)' }, '-=0.1')
-          .from(lines[1], { scale: 0, transformOrigin: origin, duration: 0.4, ease: 'power2.inOut' }, '-=0.15')
-          .from(all('[data-flow-tile]', flow), { autoAlpha: 0, y: 28, scale: 0.9, duration: 0.55, stagger: 0.07 }, '-=0.15');
-      }
-
-      // ── The journey
-      const journey = one('[data-journey]');
-      if (journey) {
-        buildJourney(journey);
-        cleanups.push(() => journey.classList.remove('anim'));
-      }
-
-      // Web fonts change text metrics; re-measure once they are in.
-      document.fonts?.ready.then(() => ScrollTrigger.refresh());
-
-      return () => cleanups.forEach((fn) => fn());
-    },
-    { scope: root },
-  );
+    return () => {
+      cancelled = true;
+      teardown();
+    };
+  }, []);
 
   return <div ref={root}>{children}</div>;
+}
+
+function setup(el: HTMLElement, gsap: Gsap, ScrollTrigger: ScrollTriggerType, Lenis: LenisType, cleanups: (() => void)[]) {
+  const all = (s: string, within: Element = el) => gsap.utils.toArray<HTMLElement>(within.querySelectorAll(s));
+  const one = (s: string, within: Element = el) => within.querySelector<HTMLElement>(s);
+
+  // ── Smooth wheel scrolling (desktop pointers only; touch keeps native momentum)
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const lenis = new Lenis({ lerp: 0.11, anchors: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    const raf = (time: number) => lenis.raf(time * 1000);
+    gsap.ticker.add(raf);
+    gsap.ticker.lagSmoothing(0);
+    cleanups.push(() => {
+      gsap.ticker.remove(raf);
+      lenis.destroy();
+    });
+  }
+
+  // ── Page progress bar
+  const bar = one('[data-progress]');
+  if (bar) gsap.to(bar, { scaleX: 1, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 0.3 } });
+
+  // ── Hero: counter on load, device drifts as you scroll away
+  const hero = one('[data-hero]');
+  if (hero) {
+    const count = one('[data-count]', hero);
+    if (count) {
+      const target = Number(count.dataset.count) || 0;
+      const c = { v: 0 };
+      gsap.to(c, { v: target, duration: 2.2, delay: 1, ease: 'power2.out', onUpdate: () => (count.textContent = String(Math.round(c.v))) });
+    }
+    gsap.to(one('[data-hero-device]', hero), { yPercent: -7, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to(one('[data-hero-copy]', hero), { autoAlpha: 0, y: -40, ease: 'none', scrollTrigger: { trigger: hero, start: '25% top', end: '75% top', scrub: true } });
+    gsap.to(one('.scroll-hint', hero), { autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: '12% top', scrub: true } });
+  }
+
+  // ── Generic reveal
+  const reveals = all('[data-reveal]');
+  if (reveals.length) {
+    gsap.set(reveals, { autoAlpha: 0, y: 28 });
+    ScrollTrigger.batch(reveals, {
+      start: 'top 90%',
+      once: true,
+      onEnter: (batch) => gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true }),
+    });
+  }
+
+  // ── Big statements that "ink in" as they cross the viewport
+  all('[data-line]').forEach((line) => {
+    gsap.fromTo(line, { opacity: 0.14 }, { opacity: 1, ease: 'none', scrollTrigger: { trigger: line, start: 'top 85%', end: 'top 52%', scrub: true } });
+  });
+
+  // ── Problem: message cards fly in, then drain of colour when "everything stalls"
+  const problem = one('[data-problem]');
+  if (problem) {
+    const cards = all('[data-p-card]', problem);
+    gsap.from(cards, {
+      y: 90,
+      x: (i) => (i - 1.5) * 50,
+      scale: 0.85,
+      autoAlpha: 0,
+      stagger: 0.08,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: cards[0], start: 'top 92%', end: 'top 45%', scrub: 0.6 },
+    });
+    const stuck = one('[data-stuck]', problem);
+    if (stuck) {
+      gsap.to(cards, { filter: 'grayscale(1) opacity(0.5)', ease: 'none', scrollTrigger: { trigger: stuck, start: 'top 85%', end: 'top 50%', scrub: true } });
+      gsap.from(stuck.querySelector('strong'), { scale: 0.86, opacity: 0.15, ease: 'none', scrollTrigger: { trigger: stuck, start: 'top 85%', end: 'top 50%', scrub: true } });
+    }
+  }
+
+  // ── Cursor spotlight on cards (pointer devices only)
+  if (window.matchMedia('(hover: hover)').matches) {
+    all('[data-spot]').forEach((card) => {
+      const move = (e: PointerEvent) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        card.style.setProperty('--my', `${e.clientY - r.top}px`);
+      };
+      card.addEventListener('pointermove', move);
+      cleanups.push(() => card.removeEventListener('pointermove', move));
+    });
+  }
+
+  // ── Explainer video: the frame grows into place as it enters the screen
+  const frame = one('[data-video-frame]');
+  if (frame) {
+    gsap.fromTo(frame, { scale: 0.86, y: 40 }, { scale: 1, y: 0, ease: 'none', scrollTrigger: { trigger: frame, start: 'top 95%', end: 'top 40%', scrub: 0.4 } });
+  }
+
+  // ── Integrations: WhatsApp → line → Tazmin → line → the systems, in that order
+  const flow = one('[data-flow]');
+  if (flow) {
+    const rtl = getComputedStyle(flow).direction === 'rtl';
+    const lines = all('[data-flow-line]', flow);
+    const origin = rtl ? '100% 0%' : '0% 0%';
+    gsap
+      .timeline({ defaults: { ease: 'power3.out' }, scrollTrigger: { trigger: flow, start: 'top 78%', once: true } })
+      .from(all('[data-flow-in]', flow), { autoAlpha: 0, scale: 0.85, y: 24, duration: 0.6 })
+      .from(lines[0], { scale: 0, transformOrigin: origin, duration: 0.4, ease: 'power2.inOut' }, '-=0.15')
+      .from(one('[data-flow-hub]', flow), { autoAlpha: 0, scale: 0.4, duration: 0.5, ease: 'back.out(2)' }, '-=0.1')
+      .from(lines[1], { scale: 0, transformOrigin: origin, duration: 0.4, ease: 'power2.inOut' }, '-=0.15')
+      .from(all('[data-flow-tile]', flow), { autoAlpha: 0, y: 28, scale: 0.9, duration: 0.55, stagger: 0.07 }, '-=0.15');
+  }
+
+  // ── The journey
+  const journey = one('[data-journey]');
+  if (journey) {
+    buildJourney(journey, gsap);
+    cleanups.push(() => journey.classList.remove('anim'));
+  }
+
+  // Web fonts change text metrics; re-measure once they are in.
+  document.fonts?.ready.then(() => ScrollTrigger.refresh());
+
 }
 
 /**
  * One scrubbed timeline, one unit of time per step. The stage is pinned with CSS
  * `position: sticky` (see home.css), so ScrollTrigger only has to map scroll to time.
  */
-function buildJourney(journey: HTMLElement) {
+function buildJourney(journey: HTMLElement, gsap: Gsap) {
   journey.classList.add('anim');
   const all = (s: string) => gsap.utils.toArray<HTMLElement>(journey.querySelectorAll(s));
   const one = (s: string) => journey.querySelector<HTMLElement>(s)!;
@@ -249,7 +268,10 @@ function buildJourney(journey: HTMLElement) {
       invalidateOnRefresh: true,
       onUpdate: (self) => {
         const time = self.progress * TOTAL;
-        stage.style.setProperty('--p', Math.min(1, time / (N - 1)).toFixed(4));
+        const p = Math.min(1, time / (N - 1));
+        stage.style.setProperty('--p', p.toFixed(4));
+        // height of the zigzag at p, from -1 to 1 (used by the phone layout's route)
+        stage.style.setProperty('--zig', ((2 / Math.PI) * Math.asin(Math.sin((N - 1) * Math.PI * p))).toFixed(3));
         const idx = Math.min(N - 1, Math.floor(time));
         stops.forEach((s, i) => {
           s.classList.toggle('on', i === idx);

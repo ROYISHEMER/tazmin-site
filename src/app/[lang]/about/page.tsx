@@ -28,6 +28,24 @@ export default async function About({ params }: LangParams) {
             {s.p.map((p) => <p key={p}>{p}</p>)}
           </section>
         ))}
+        <section aria-labelledby="team-title">
+          <h2 id="team-title">{extra(lang).home.team}</h2>
+          <ul className="team" role="list">
+            {SITE.people.map((p) => (
+              <li className="team-card" key={p.phone}>
+                {p.photo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img className="team-photo" src={p.photo} alt="" loading="lazy" />
+                ) : (
+                  <span className="team-photo initials" aria-hidden="true">{p.name[lang].split(' ').map((w) => w.slice(0, 1)).join('')}</span>
+                )}
+                <b>{p.name[lang]}</b>
+                {p.role && <span className="team-role">{p.role[lang]}</span>}
+                <a className="ltr" href={telHref(p.phone)}>{formatPhone(p.phone)}</a>
+              </li>
+            ))}
+          </ul>
+        </section>
         <section className="card" aria-labelledby="company-title">
           <h2 id="company-title">{a.companyTitle}</h2>
           <dl className="kv">

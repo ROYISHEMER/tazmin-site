@@ -6,6 +6,9 @@ import { Journey } from '@/components/Journey';
 import { ContactForm } from '@/components/ContactForm';
 import { Integrations } from '@/components/Integrations';
 import { VideoShowcase } from '@/components/VideoShowcase';
+import { Testimonials } from '@/components/Testimonials';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
+import { SITE } from '@/config/site';
 import { LogoMark, Check } from '@/components/LogoMark';
 import { ASSET_BASE, dict, href } from '@/i18n';
 import { extra } from '@/i18n/extra';
@@ -130,6 +133,8 @@ export default async function Home({ params }: LangParams) {
         </div>
       </section>
 
+      <Testimonials lang={lang} />
+
       {/* ───────── AI vs code ───────── */}
       <section className="ai">
         <div className="wrap">
@@ -158,13 +163,6 @@ export default async function Home({ params }: LangParams) {
       {/* ───────── Integrations ───────── */}
       <Integrations lang={lang} />
 
-      {/* ───────── Benefits ───────── */}
-      <section className="benefits" aria-label={t.benefits.label}>
-        <div className="wrap big-lines center">
-          {t.benefits.words.map((w) => <p className="big-line xl" data-line key={w}>{w}</p>)}
-        </div>
-      </section>
-
       {/* ───────── Pilot ───────── */}
       <section className="pilot">
         <div className="wrap">
@@ -187,6 +185,12 @@ export default async function Home({ params }: LangParams) {
             <h2 className="h-section">{t.faq.title}</h2>
           </div>
           <div className="faq-list">
+            {SITE.pricing[lang] && (
+              <details>
+                <summary><span>{x.home.pricingQ}</span><span className="plus" aria-hidden="true" /></summary>
+                <p>{SITE.pricing[lang]}</p>
+              </details>
+            )}
             {t.faq.items.map((it) => (
               <details key={it.q}>
                 <summary><span>{it.q}</span><span className="plus" aria-hidden="true" /></summary>
@@ -206,6 +210,10 @@ export default async function Home({ params }: LangParams) {
             <p className="talk-q">{t.cta.q}</p>
             <h2 className="h-section">{t.cta.title}</h2>
             <p className="talk-slogan">{t.cta.slogan}</p>
+            <ul className="talk-benefits" role="list" aria-label={t.benefits.label}>
+              {t.benefits.words.map((w) => <li key={w}><Check w={2.8} />{w.replace(/[.]$/, '')}</li>)}
+            </ul>
+            <WhatsAppButton lang={lang} className="btn lg on-dark" />
           </div>
           <div className="card talk-form">
             <ContactForm lang={lang} id="home" />

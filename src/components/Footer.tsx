@@ -31,6 +31,7 @@ export function Footer({ lang }: { lang: Lang }) {
               <li><Link href={href('/about', lang)}>{t.nav.about}</Link></li>
               <li><Link href={href('/contact', lang)}>{x.nav.talk}</Link></li>
               {isSet(SITE.email) && <li><a href={`mailto:${SITE.email}`} className="ltr">{SITE.email}</a></li>}
+              {isSet(SITE.whatsapp) && <li><a href={`https://wa.me/${SITE.whatsapp}`} rel="noopener">WhatsApp</a></li>}
               {SITE.people[0] && <li><a href={telHref(SITE.people[0].phone)} className="ltr">{formatPhone(SITE.people[0].phone)}</a></li>}
             </ul>
           </nav>

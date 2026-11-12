@@ -1,4 +1,5 @@
 import { ContactForm } from '@/components/ContactForm';
+import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { dict } from '@/i18n';
 import { extra } from '@/i18n/extra';
 import { SITE, isSet, val, formatPhone, telHref } from '@/config/site';
@@ -47,6 +48,7 @@ export default async function Contact({ params }: LangParams) {
             <dt>{dict(lang).about.companyRows.address}</dt>
             <dd>{val(SITE.address[lang], lang)}</dd>
           </dl>
+          <WhatsAppButton lang={lang} className="btn" />
         </aside>
       </div>
     </div>

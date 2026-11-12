@@ -10,6 +10,10 @@ export interface Person {
   name: Record<Lang, string>;
   /** Local format, digits only: "0524369558". */
   phone: string;
+  /** Optional: shown under the name on the About page. */
+  role?: Record<Lang, string>;
+  /** Optional: a square photo in /public, e.g. "/team/royi.jpg". Initials are shown without one. */
+  photo?: string;
 }
 
 /** The people behind Tazmin. The first one is the primary contact. */
@@ -42,8 +46,15 @@ export const SITE = {
 
   email: 'vn17198royi@gmail.com' as string | null,
   people: PEOPLE,
-  /** Digits only, international format without "+", e.g. "972501234567". Not set: the row is hidden. */
-  whatsapp: null as string | null,
+  /** WhatsApp number for the "talk to us on WhatsApp" buttons: digits only, international format
+   *  without "+". Currently the primary contact's mobile. `null` hides the buttons. */
+  whatsapp: '972524369558' as string | null,
+
+  /**
+   * Optional one-line answer to "how much does it cost?", shown as the first FAQ item.
+   * Leave null until there is a price or a pilot offer you are ready to publish.
+   */
+  pricing: { he: null, en: null } as Record<Lang, string | null>,
 
   /**
    * Accessibility coordinator — required in the Israeli accessibility statement.
