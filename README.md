@@ -109,7 +109,7 @@ accounts; the site does not need them.
 - [ ] Configure a lead destination (database and/or email) and send a test lead.
 - [ ] Confirm every system listed in the integrations section really is supported before publishing the claim.
 - [ ] Third-party logos are shown without the owners' permission so far. Check each company's brand guidelines or ask before publishing; get a higher-resolution Hashavshevet logo.
-- [ ] Add a social preview image (`src/app/[lang]/opengraph-image.png`, 1200×630).
+- [x] Share image for WhatsApp / social previews: `public/og/he.jpg`, `public/og/en.jpg` (1200×630, the brand frame of the video).
 
 ## Snapshots
 
