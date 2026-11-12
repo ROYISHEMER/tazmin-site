@@ -19,9 +19,17 @@ const PEOPLE: Person[] = [
   { name: { he: 'אלעד גנבר', en: 'Elad Ganbar' }, phone: '0543121294' },
 ];
 
+/**
+ * Production origin, no trailing slash. Used for canonical links, hreflang and the sitemap.
+ * Order: NEXT_PUBLIC_SITE_URL (set this once you have your own domain), then the Vercel
+ * production domain (provided automatically on Vercel), then a placeholder for local work.
+ */
+const ORIGIN =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'https://tazmin.example');
+
 export const SITE = {
-  /** Production origin, no trailing slash. TODO(launch): set the real domain. */
-  url: 'https://tazmin.example',
+  url: ORIGIN.replace(/\/$/, ''),
 
   /**
    * Who operates the site. There is no registered company yet, so this is the three
